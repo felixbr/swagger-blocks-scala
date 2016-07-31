@@ -26,47 +26,78 @@ object models {
   case class ApiLicense(name: Option[String])
 
   case class ApiPath(
+    operations: Map[Method, ApiOperation]
+  )
+
+  case class ApiPathDefinition(
     path: String,
-    description: Option[String],
-    summary: Option[String],
-    operations: List[ApiOperation]
+    metadata: ApiPath
   )
 
   case class ApiOperation(
-    method: Method,
     description: Option[String],
+    summary: Option[String],
+    tags: List[String],
     parameters: List[ApiParameter],
-    responses: List[ApiResponse]
+    responses: Map[String, ApiResponse]
+  )
+
+  case class ApiOperationDefinition(
+    method: Method,
+    operation: ApiOperation
   )
 
   case class ApiParameter(
     name: String,
-    in: String,
+    in: ParameterIn,
     required: Boolean,
+    `type`: PropertyType,
     description: Option[String],
     schema: Option[ApiSchemaRef]
   )
 
   case class ApiResponse(
-    status: Int,
     description: Option[String],
     schema: Option[ApiSchemaRef]
   )
 
-  case class ApiSchema(
-    name: String,
-    properties: List[ApiProperty]
+  case class ApiResponseDefinition(
+    status: String,
+    response: ApiResponse
   )
 
+  case class ApiSchemaDefinition(name: String, schema: ApiSchema)
+
+  sealed trait ApiSchema
+
+  case class ApiObjectSchema(
+    properties: List[ApiPropertyDefinition]
+  ) extends ApiSchema
+
+  case class ApiValueSchema(
+    typ: PropertyType
+  ) extends ApiSchema
+
   sealed trait ApiSchemaRef
-  case class SingleRef(schema: ApiSchema) extends ApiSchemaRef
-  case class MultipleRef(schema: ApiSchema) extends ApiSchemaRef
-  case class InlineType(t: PropertyType) extends ApiSchemaRef
+  case class SingleRef(schema: ApiSchemaDefinition) extends ApiSchemaRef
+  case class MultipleRef(schema: ApiSchemaDefinition) extends ApiSchemaRef
+  case class InlineSchema(schema: ApiSchema) extends ApiSchemaRef
+  case class MultipleInlineSchema(schema: ApiSchema) extends ApiSchemaRef
 
   case class ApiProperty(
-    name: String,
-    `type`: String,
-    required: Boolean,
+    `type`: PropertyType,
     description: Option[String]
+  )
+
+  case class ApiPropertyDefinition(
+    name: String,
+    prop: ApiProperty,
+    required: Boolean
+  )
+
+  case class ApiSpec(
+    root: ApiRoot,
+    paths: Map[String, ApiPath],
+    definitions: Map[String, ApiSchema]
   )
 }

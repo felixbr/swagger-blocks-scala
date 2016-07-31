@@ -49,33 +49,48 @@ package object swaggerblocks {
   }
 
   def swaggerPath(path: String)(
-    description: Option[String] = None,
-    summary: Option[String] = None,
-    operations: List[ApiOperation] = List.empty
-  ): ApiPath = {
-    ApiPath(path, description, summary, operations)
+    operations: List[ApiOperationDefinition] = List.empty
+  ): ApiPathDefinition = {
+    ApiPathDefinition(
+      path,
+      ApiPath(
+        operations.map(o => (o.method, o.operation)).toMap
+      )
+    )
   }
 
-  def operations(ops: ApiOperation*): List[ApiOperation] = ops.toList
+  def operations(ops: ApiOperationDefinition*): List[ApiOperationDefinition] = ops.toList
 
   def operation(method: Method)(
     description: Option[String] = None,
+    summary: Option[String] = None,
+    tags: List[String] = List.empty,
     parameters: List[ApiParameter] = List.empty,
-    responses: List[ApiResponse] = List.empty
-  ): ApiOperation = {
-    ApiOperation(method, description, parameters, responses)
+    responses: List[ApiResponseDefinition] = List.empty
+  ): ApiOperationDefinition = {
+    ApiOperationDefinition(
+      method,
+      ApiOperation(
+        description,
+        summary,
+        tags,
+        parameters,
+        responses.map(r => (r.status, r.response)).toMap
+      )
+    )
   }
 
   def parameters(ps: ApiParameter*): List[ApiParameter] = ps.toList
 
   def parameter(
     name: String,
-    in: String,
+    in: ParameterIn,
     required: Boolean,
+    typ: PropertyType,
     description: Option[String] = None,
     schema: Option[ApiSchemaRef] = None
   ): ApiParameter = {
-    ApiParameter(name, in, required, description, schema)
+    ApiParameter(name, in, required, typ, description, schema)
   }
 
   def responses(rs: ApiResponse*): List[ApiResponse] = rs.toList
@@ -83,34 +98,45 @@ package object swaggerblocks {
   def response(statusCode: Int)(
     description: Option[String] = None,
     schema: Option[ApiSchemaRef] = None
-  ): ApiResponse = {
-    ApiResponse(statusCode, description, schema)
+  ): ApiResponseDefinition = {
+    ApiResponseDefinition(
+      statusCode.toString,
+      ApiResponse(description, schema)
+    )
   }
 
   def swaggerSchema(name: String)(
-    properties: ApiProperty*
-  ): ApiSchema = {
-    ApiSchema(name, properties.toList)
+    properties: ApiPropertyDefinition*
+  ): ApiSchemaDefinition = {
+    ApiSchemaDefinition(name, ApiObjectSchema(properties.toList))
   }
 
   def property(name: String)(
     typ: PropertyType,
     required: Boolean = true,
     description: Option[String] = None
-  ): ApiProperty = {
-    ApiProperty(name, typ.toString, required, description)
+  ): ApiPropertyDefinition = {
+    ApiPropertyDefinition(
+      name,
+      ApiProperty(typ, description),
+      required
+    )
   }
 
-  def oneOf(schemaRef: ApiSchema): Option[SingleRef] = {
+  def oneOf(schemaRef: ApiSchemaDefinition): Option[SingleRef] = {
     Some(SingleRef(schemaRef))
   }
 
-  def manyOf(schemaRef: ApiSchema): Option[MultipleRef] = {
+  def manyOf(schemaRef: ApiSchemaDefinition): Option[MultipleRef] = {
     Some(MultipleRef(schemaRef))
   }
 
-  def valueOf(valueType: PropertyType): Option[InlineType] = {
-    Some(InlineType(s.String))
+  def oneOf(propertyType: PropertyType): Option[InlineSchema] = {
+    Some(InlineSchema(ApiValueSchema(propertyType)))
+  }
+
+  def manyOf(propertyType: PropertyType): Option[MultipleInlineSchema] = {
+    Some(MultipleInlineSchema(ApiValueSchema(propertyType)))
   }
 
   private def allNone(optionals: Option[_]*): Boolean = {

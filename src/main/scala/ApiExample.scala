@@ -1,6 +1,5 @@
-import swaggerblocks._
 import swaggerblocks.Implicits.stringToSomeString
-import internal.rendering._
+import swaggerblocks._
 
 object ApiExample extends App {
 
@@ -24,17 +23,18 @@ object ApiExample extends App {
   )
 
   lazy val petsPath = swaggerPath("/pets")(
-    description = "The pets route",
-
     operations = List(
       operation(GET)(
         description = "Returns a list of pet objects",
 
+        tags = List("pet"),
+
         parameters = List(
           parameter(
             name = "tags",
-            in = "query",
+            in = Query,
             required = false,
+            typ = s.String,
             description = "tags to filter by",
             schema = None
           )
@@ -43,7 +43,7 @@ object ApiExample extends App {
         responses = List(
           response(200)(
             description = "pet response",
-            schema = valueOf(s.String)
+            schema = manyOf(petSchema)
           )
         )
       )
@@ -66,9 +66,22 @@ object ApiExample extends App {
     )
   )
 
+  import rendering.render
   println(render(
     petstoreRoot,
     List(petsPath),
     List(petSchema)
   ))
+}
+
+object rendering {
+  import internal.models._
+
+  def render(root: ApiRoot, paths: Seq[ApiPathDefinition], schemata: Seq[ApiSchemaDefinition]): String = {
+    s"""
+       |$root
+       |$paths
+       |$schemata
+       """.stripMargin
+  }
 }
