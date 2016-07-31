@@ -12,6 +12,12 @@ package object rendering {
       )
     }
 
+    def renderPretty(root: ApiRoot, paths: Seq[ApiPathDefinition], schemata: Seq[ApiSchemaDefinition]): String = {
+      Json.prettyPrint(
+        jsonAst(root, paths, schemata)
+      )
+    }
+
     def jsonAst(root: ApiRoot, paths: Seq[ApiPathDefinition], schemata: Seq[ApiSchemaDefinition]): JsValue = {
       Json.toJson(
         ApiSpec(
