@@ -1,14 +1,24 @@
 val commonSettings = Seq(
-  name := "swagger-blocks-scala",
   version := "0.1",
-  scalaVersion := "2.11.8"
+  scalaVersion := Version.Scala
 )
 
-lazy val root = project.in(file("."))
+lazy val core = project.in(file("."))
   .settings(commonSettings: _*)
   .settings(
-    libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+    name := "swagger-blocks-scala",
+    libraryDependencies ++= List(
+      Lib.scalaTest % "test"
+    )
+  )
+
+lazy val play = project.in(file("swagger-blocks-play"))
+  .dependsOn(core)
+  .settings(commonSettings: _*)
+  .settings(
+    name := "swagger-blocks-play",
+    libraryDependencies ++= List(
+      Lib.playJson
     )
   )
 
