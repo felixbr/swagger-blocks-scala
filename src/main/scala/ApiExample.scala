@@ -1,58 +1,74 @@
 import swaggerblocks._
+import swaggerblocks.Implicits.stringToSomeString
+import internal.rendering._
 
 object ApiExample extends App {
-  swaggerRoot("2.0") { r =>
-    r.host = "petstore.swagger.wordnik.com"
-    r.basePath = "/api"
-    r.consumes = List("application/json")
-    r.produces = List("application/json")
 
-    r.info { i =>
-      i.version = "1.0.0"
-      i.title = "Swagger Petstore"
-      i.description = "A sample API that uses a petstore as an example"
+  lazy val petstoreRoot = swaggerRoot("2.0")(
+    host = "petstore.swagger.wordnik.com",
+    basePath = "/api",
 
-      i.contact { c =>
-        c.name = "Wordnik API Team"
-      }
+    info(
+      version = "1.0.0",
+      title = "Swagger Petstore",
+      description = "A sample API that uses a petstore as an example",
 
-      i.license { l =>
-        l.name = "MIT"
-      }
-    }
-  }
+      contact = contact(
+        name = "Wordnik API Team"
+      ),
 
-  swaggerPath("/pets") { p =>
-    p.operation(GET) { o =>
-      o.description = "Bla"
+      license = license(
+        name = "MIT"
+      )
+    )
+  )
 
-      o.parameter { p =>
-        p.name = "tags"
-        p.in = "query"
-        p.description = "tags to filter by"
-        p.required = "false"
+  lazy val petsPath = swaggerPath("/pets")(
+    description = "The pets route",
 
-        // TODO items, schema
-      }
+    operations = List(
+      operation(GET)(
+        description = "Returns a list of pet objects",
 
-      o.response(200) { r =>
-        // TODO
-      }
-    }
-  }
+        parameters = List(
+          parameter(
+            name = "tags",
+            in = "query",
+            required = false,
+            description = "tags to filter by",
+            schema = None
+          )
+        ),
 
-  swaggerSchema("Pet") { s =>
-    s.property("id") { p =>
-      p.typ = "integer"
-    }
+        responses = List(
+          response(200)(
+            description = "pet response",
+            schema = valueOf(s.String)
+          )
+        )
+      )
+    )
+  )
 
-    s.property("name") { p =>
-      p.typ = "string"
-      p.description = "Name of the pet"
-    }
+  lazy val petSchema = swaggerSchema("Pet")(
+    property("id")(
+      typ = s.Int
+    ),
 
-    s.property("tag", required = false) { p =>
-      p.typ = "string"
-    }
-  }
+    property("name")(
+      typ = s.String,
+      description = "Name of the pet"
+    ),
+
+    property("tag")(
+      typ = s.String,
+      required = false
+    )
+  )
+
+  println(render(
+    petstoreRoot,
+    List(petsPath),
+    List(petSchema)
+  ))
 }
