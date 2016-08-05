@@ -32,7 +32,13 @@ object formats {
     })
   }
 
-  implicit val apiPropertyWrites = Json.writes[ApiProperty]
+  implicit val apiPropertyWrites = new Writes[ApiProperty] {
+    def writes(obj: ApiProperty): JsValue = {
+      val json = Json.toJson(obj)(Json.writes[ApiProperty]).as[JsObject]
+
+      (json - "typ") + ("type" -> Json.toJson(obj.typ))
+    }
+  }
 
 //  implicit val apiPropertyDefinitionWrites = new Writes[ApiPropertyDefinition] {
 //    def writes(obj: ApiPropertyDefinition): JsValue = {
@@ -101,7 +107,13 @@ object formats {
     }
   }
 
-  implicit val apiParameterWrites = Json.writes[ApiParameter]
+  implicit val apiParameterWrites = new Writes[ApiParameter] {
+    def writes(p: ApiParameter): JsValue = {
+      val json = Json.toJson(p)(Json.writes[ApiParameter]).as[JsObject]
+
+      (json - "typ") + ("type" -> Json.toJson(p.typ))
+    }
+  }
 
   implicit val apiResponseWrites = Json.writes[ApiResponse]
 

@@ -1,6 +1,6 @@
 val commonSettings = Seq(
   version := "0.1",
-  scalaVersion := Version.Scala
+  scalaVersion := Version.scala
 )
 
 lazy val core = project.in(file("."))

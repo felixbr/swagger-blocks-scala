@@ -51,7 +51,7 @@ object models {
     name: String,
     in: ParameterIn,
     required: Boolean,
-    `type`: PropertyType,
+    typ: PropertyType,
     description: Option[String],
     schema: Option[ApiSchemaRef]
   )
@@ -85,7 +85,7 @@ object models {
   case class MultipleInlineSchema(schema: ApiSchema) extends ApiSchemaRef
 
   case class ApiProperty(
-    `type`: PropertyType,
+    typ: PropertyType,
     description: Option[String]
   )
 
