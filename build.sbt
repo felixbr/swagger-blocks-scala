@@ -22,6 +22,13 @@ lazy val play = project.in(file("swagger-blocks-play"))
     )
   )
 
+lazy val examples = project.in(file("examples"))
+    .dependsOn(play, core)
+    .settings(commonSettings: _*)
+    .settings(
+      name := "swagger-blocks-examples"
+    )
+
 cancelable in Global := true
 
 scalacOptions ++= Seq(

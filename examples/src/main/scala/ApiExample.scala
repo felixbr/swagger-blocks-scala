@@ -1,5 +1,5 @@
-import swaggerblocks.Implicits.stringToSomeString
 import swaggerblocks._
+import swaggerblocks.Implicits.stringToSomeString
 
 object ApiExample extends App {
 
@@ -82,6 +82,6 @@ object rendering {
        |$root
        |$paths
        |$schemata
-       """.stripMargin
+     """.stripMargin
   }
 }

@@ -40,12 +40,6 @@ object formats {
     }
   }
 
-//  implicit val apiPropertyDefinitionWrites = new Writes[ApiPropertyDefinition] {
-//    def writes(obj: ApiPropertyDefinition): JsValue = {
-//      Json.toJson()
-//    }
-//  }
-
   implicit val apiSchemaWrites = new Writes[ApiSchema] {
     def writes(obj: ApiSchema): JsValue = obj match {
       case ApiObjectSchema(propdefs) =>
