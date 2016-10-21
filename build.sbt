@@ -6,14 +6,17 @@ val commonSettings = Seq(
   licenses := List("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php"))
 )
 
+val commonDeps = Seq(
+  Lib.scalaTest % "test",
+  Lib.jsonSchemaValidator % "test"
+)
+
 lazy val core = project.in(file("."))
   .settings(commonSettings: _*)
   .settings(publishSettings: _*)
   .settings(
     name := "swagger-blocks-scala",
-    libraryDependencies ++= List(
-      Lib.scalaTest % "test"
-    )
+    libraryDependencies ++= commonDeps
   )
 
 lazy val play = project.in(file("swagger-blocks-play"))
@@ -22,7 +25,7 @@ lazy val play = project.in(file("swagger-blocks-play"))
   .settings(publishSettings: _*)
   .settings(
     name := "swagger-blocks-play",
-    libraryDependencies ++= List(
+    libraryDependencies ++= commonDeps ++ List(
       Lib.playJson
     )
   )
