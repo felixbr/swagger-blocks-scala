@@ -1,0 +1,30 @@
+# Use Docker-based container (instead of OpenVZ)
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+
+    # The line below can be used to cache a given sbt version.
+    - $HOME/.sbt/launchers/0.13.8
+
+    # At the moment, Scala 2.11.2 and 2.10.4 are preinstalled in Travis VM
+    # image.
+    # The line below is used to cache the scala version used by the build
+    # job, as these versions might be replaced after a Travis CI build
+    # environment upgrade (e.g. scala 2.11.2 could be replaced by scala 2.11.4).
+    - $HOME/.sbt/boot/scala-$TRAVIS_SCALA_VERSION
+
+language: scala
+scala:
+  - 2.11.8
+
+jdk:
+  - oraclejdk8
+
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+
+script: sbt ++$TRAVIS_SCALA_VERSION play/test
