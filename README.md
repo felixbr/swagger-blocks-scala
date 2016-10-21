@@ -1,4 +1,4 @@
-# swagger-blocks-scala
+# swagger-blocks-scala [![Build Status](https://travis-ci.org/felixbr/swagger-blocks-scala.svg?branch=master)](https://travis-ci.org/felixbr/swagger-blocks-scala)
 
 A library to express swagger specifications using a Scala DSL.
 
