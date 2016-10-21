@@ -9,7 +9,8 @@ object models {
     swagger: String,
     host: Option[String],
     basePath: Option[String],
-    info: ApiInfo
+    info: ApiInfo,
+    externalDocs: Option[ApiExternalDocs]
   )
 
   case class ApiInfo(
@@ -21,9 +22,21 @@ object models {
     license: Option[ApiLicense]
   )
 
-  case class ApiContact(name: Option[String])
+  case class ApiContact(
+    name: Option[String],
+    url: Option[String],
+    email: Option[String]
+  )
 
-  case class ApiLicense(name: Option[String])
+  case class ApiLicense(
+    name: Option[String],
+    url: Option[String]
+  )
+
+  case class ApiExternalDocs(
+    url: String,
+    description: Option[String]
+  )
 
   case class ApiPath(
     operations: Map[Method, ApiOperation]

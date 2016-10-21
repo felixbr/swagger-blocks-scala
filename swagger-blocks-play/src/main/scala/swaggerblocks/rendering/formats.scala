@@ -10,6 +10,8 @@ object formats {
 
   implicit val apiLicenseWrites = Json.writes[ApiLicense]
 
+  implicit val apiExternalDocs = Json.writes[ApiExternalDocs]
+
   implicit val apiInfoWrites = Json.writes[ApiInfo]
 
   implicit val apiRootWrites = Json.writes[ApiRoot]

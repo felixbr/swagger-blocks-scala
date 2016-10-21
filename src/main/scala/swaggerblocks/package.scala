@@ -14,9 +14,10 @@ package object swaggerblocks {
   def swaggerRoot(swagger: String = "2.0")(
     host: Option[String] = None,
     basePath: Option[String] = None,
-    info: ApiInfo
+    info: ApiInfo,
+    externalDocs: Option[ApiExternalDocs] = None
   ): ApiRoot = {
-    ApiRoot(swagger, host, basePath, info)
+    ApiRoot(swagger, host, basePath, info, externalDocs)
   }
 
   def info(
@@ -31,21 +32,31 @@ package object swaggerblocks {
   }
 
   def contact(
-    name: Option[String] = None
+    name: Option[String] = None,
+    url: Option[String] = None,
+    email: Option[String] = None
   ): Option[ApiContact] = {
-    if (allNone(name))
+    if (allNone(name, url, email))
       None
     else
-      Some(ApiContact(name))
+      Some(ApiContact(name, url, email))
   }
 
   def license(
-    name: Option[String] = None
+    name: Option[String] = None,
+    url: Option[String] = None
   ): Option[ApiLicense] = {
-    if (allNone(name))
+    if (allNone(name, url))
       None
     else
-      Some(ApiLicense(name))
+      Some(ApiLicense(name, url))
+  }
+
+  def externalDocs(
+    url: String,
+    description: Option[String] = None
+  ): Option[ApiExternalDocs] = {
+    Some(ApiExternalDocs(url, description))
   }
 
   def swaggerPath(path: String)(

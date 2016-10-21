@@ -1,9 +1,9 @@
 package fixtures
 
-object PetstoreAPI {
+import swaggerblocks._
+import swaggerblocks.Implicits.stringToSomeString
 
-  import swaggerblocks._
-  import swaggerblocks.Implicits.stringToSomeString
+object PetstoreAPI {
 
   lazy val petstoreRoot = swaggerRoot("2.0")(
     host = "petstore.swagger.wordnik.com",
@@ -15,12 +15,20 @@ object PetstoreAPI {
       description = "A sample API that uses a petstore as an example",
 
       contact = contact(
-        name = "Wordnik API Team"
+        name = "Wordnik API Team",
+        email = "foo@example.com",
+        url = "http://madskristensen.net"
       ),
 
       license = license(
-        name = "MIT"
+        name = "MIT",
+        url = "http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT"
       )
+    ),
+
+    externalDocs(
+      description = "Find more info here",
+      url = "https://swagger.io"
     )
   )
 
