@@ -61,6 +61,19 @@ lazy val publishSettings = Seq(
       Some("snapshots" at nexus + "content/repositories/snapshots")
     else
       Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-  }
+  },
+  pomExtra :=
+    <scm>
+      <url>git@github.com:felixbr/swagger-blocks-scala.git</url>
+      <connection>scm:git:git@github.com:felixbr/swagger-blocks-scala.git</connection>
+    </scm>
+    <developers>
+      <developer>
+        <id>felixbr</id>
+        <name>Felix Bruckmeier</name>
+        <url>https://github.com/felixbr</url>
+      </developer>
+    </developers>
+
 )
 
