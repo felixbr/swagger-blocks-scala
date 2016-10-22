@@ -21,7 +21,7 @@ Currently this only supports a part of the full swagger-spec
 
 There is a core modul available for the DSL and core data types:
 
-    "io.github.felixbr" %% "swagger-blocks-scala" % "0.1.0-SNAPSHOT"
+    "io.github.felixbr" %% "swagger-blocks-scala" % "0.1.1"
 
 The plan is to provide bindings for the most popular json libs, but right now 
 only play-json is supported. The json-extensions also include the core lib, so 
@@ -29,7 +29,7 @@ you don't need to specify both:
 
 #### play-json (2.5.4)
 
-    "io.github.felixbr" %% "swagger-blocks-play" % "0.1.0-SNAPSHOT"
+    "io.github.felixbr" %% "swagger-blocks-play" % "0.1.1"
     
 ### Writing Swagger Path and Schema specifications
     

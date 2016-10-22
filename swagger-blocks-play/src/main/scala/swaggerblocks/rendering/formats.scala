@@ -132,7 +132,7 @@ object formats {
   implicit val apiSpecWrites = new Writes[ApiSpec] {
     def writes(spec: ApiSpec): JsValue = {
       Json.toJson(spec.root).as[JsObject] ++ Json.obj(
-        "paths" -> Json.toJson(spec.paths),
+        "paths" -> spec.paths,
         "definitions" -> spec.definitions
       )
     }

@@ -1,5 +1,5 @@
 val commonSettings = Seq(
-  version := "0.1.0-SNAPSHOT",
+  version := "0.1.1",
   scalaVersion := Version.scala,
   homepage := Some(url("https://github.com/felixbr/swagger-blocks-scala")),
   organization := "io.github.felixbr",

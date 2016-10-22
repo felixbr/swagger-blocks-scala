@@ -2,7 +2,7 @@ import sbt._
 
 object Version {
   final val akka                = "2.4.8"
-  final val play                = "2.5.4"
+  final val play                = "2.5.9"
   final val scala               = "2.11.8"
   final val scalaTest           = "3.0.0"
   final val uPickle             = "0.4.1"
