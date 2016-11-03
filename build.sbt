@@ -8,7 +8,9 @@ val commonSettings = Seq(
 
 val commonDeps = Seq(
   Lib.scalaTest % "test",
-  Lib.jsonSchemaValidator % "test"
+  Lib.jsonSchemaValidator % "test",
+  Lib.scalacheck % "test",
+  Lib.scalacheckShapeless % "test"
 )
 
 lazy val core = project.in(file("."))
