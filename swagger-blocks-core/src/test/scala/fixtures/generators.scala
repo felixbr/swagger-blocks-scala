@@ -4,8 +4,29 @@ import internal.models._
 import org.scalacheck._
 import org.scalacheck.{Arbitrary => A}
 import org.scalacheck.Shapeless._
+import org.scalacheck.rng.Seed
+import swaggerblocks.Method
+import org.scalacheck.Prop._
+
+import scala.util.Random
 
 object generators {
+
+  implicit class RichGen(gen: Gen[_]) {
+    def failures(): Int = {
+      val params = Gen.Parameters.default
+      (1 to 1000).map { _ =>
+        val seed = Seed(Random.nextLong())
+        gen.apply(params, seed)
+      }.count(s => s.isEmpty)
+    }
+
+    def test() = {
+      forAll(gen) { _ => true }.check
+    }
+  }
+
+  // ROOT
 
   lazy val genBasePath: Gen[String] = {
     def genSlash = Gen.const("/")
@@ -25,13 +46,13 @@ object generators {
   }
 
   lazy val genEmail: Gen[String] = for {
-    name <- Gen.alphaLowerStr.suchThat(_.nonEmpty)
-    domain <- Gen.alphaLowerStr.suchThat(_.nonEmpty)
+    name <- Gen.identifier
+    domain <- Gen.identifier
   } yield s"$name@$domain"
 
   lazy val genApiRoot = for {
     swagger <- Gen.const("2.0")
-    host <- A.arbitrary[Option[String]]
+    host <- A.arbitrary[Option[String]].retryUntil(!_.contains(""))
     basePath <- genBasePath
     info <- genApiInfo
     externalDocs <- A.arbitrary[Option[ApiExternalDocs]]
@@ -48,8 +69,26 @@ object generators {
 
   lazy val genApiContact = for {
     name <- A.arbitrary[Option[String]]
-    url <- A.arbitrary[Option[String]]
+    url = "http://foo.bar/?baz=qux#quux" // not checked right now
     email <- genEmail
-  } yield ApiContact(name, url, Some(email))
+  } yield ApiContact(name, Some(url), Some(email))
 
+  // PATHS
+
+  lazy val genApiPathDefinition = for {
+    path <- A.arbitrary[String]
+    pathDefinition <- genApiPath
+  } yield ApiPathDefinition(path, pathDefinition)
+
+  lazy val genApiPath = for {
+    operationsList <- Gen.listOfN(3, genOperation)
+  } yield ApiPath(operationsList.toMap)
+
+  lazy val genOperation = for {
+    method <- A.arbitrary[Method]
+    apiOperation <- genApiOperation
+  } yield (method, apiOperation)
+
+  lazy val genApiOperation = A.arbitrary(implicitly[Arbitrary[ApiOperation]])
+    .retryUntil(_ => true)
 }
