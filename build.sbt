@@ -13,7 +13,17 @@ val commonDeps = Seq(
   Lib.scalacheckShapeless % "test"
 )
 
-lazy val core = project.in(file("."))
+lazy val root = project.in(file("."))
+  .aggregate(core, play, yaml)
+  .settings(
+    publishArtifact := false,
+    publish := {},
+    publishLocal := {},
+    packagedArtifacts := Map.empty,
+    aggregate in update := false
+  )
+
+lazy val core = project.in(file("swagger-blocks-core"))
   .settings(commonSettings: _*)
   .settings(publishSettings: _*)
   .settings(
@@ -47,7 +57,10 @@ lazy val examples = project.in(file("examples"))
     .dependsOn(play, yaml, core)
     .settings(commonSettings: _*)
     .settings(
-      name := "swagger-blocks-examples"
+      name := "swagger-blocks-examples",
+      publishArtifact := false,
+      publish := {},
+      publishLocal := {}
     )
 
 cancelable in Global := true
