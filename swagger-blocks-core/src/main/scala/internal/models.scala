@@ -15,7 +15,7 @@ object models {
 
   case class ApiInfo(
     version: String,
-    title: Option[String],
+    title: String,
     description: Option[String],
     termsOfService: Option[String],
     contact: Option[ApiContact],
@@ -29,7 +29,7 @@ object models {
   )
 
   case class ApiLicense(
-    name: Option[String],
+    name: String,
     url: Option[String]
   )
 

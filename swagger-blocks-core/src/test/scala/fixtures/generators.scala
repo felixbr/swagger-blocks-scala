@@ -25,8 +25,8 @@ object generators {
   }
 
   lazy val genEmail: Gen[String] = for {
-    name <- Gen.alphaLowerStr
-    domain <- Gen.alphaLowerStr
+    name <- Gen.alphaLowerStr.suchThat(_.nonEmpty)
+    domain <- Gen.alphaLowerStr.suchThat(_.nonEmpty)
   } yield s"$name@$domain"
 
   lazy val genApiRoot = for {
@@ -39,7 +39,7 @@ object generators {
 
   lazy val genApiInfo: Gen[ApiInfo] = for {
     version <- A.arbitrary[String]
-    title <- A.arbitrary[Option[String]]
+    title <- A.arbitrary[String]
     description <- A.arbitrary[Option[String]]
     termsOfService <- A.arbitrary[Option[String]]
     contact <- genApiContact

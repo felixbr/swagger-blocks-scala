@@ -22,7 +22,7 @@ package object swaggerblocks {
 
   def info(
     version: String,
-    title: Option[String] = None,
+    title: String,
     description: Option[String] = None,
     termsOfService: Option[String] = None,
     contact: Option[ApiContact] = None,
@@ -43,13 +43,10 @@ package object swaggerblocks {
   }
 
   def license(
-    name: Option[String] = None,
+    name: String,
     url: Option[String] = None
   ): Option[ApiLicense] = {
-    if (allNone(name, url))
-      None
-    else
-      Some(ApiLicense(name, url))
+    Some(ApiLicense(name, url))
   }
 
   def externalDocs(
