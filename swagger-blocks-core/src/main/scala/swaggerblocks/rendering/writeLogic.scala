@@ -27,7 +27,6 @@ object writeLogic {
     case DELETE => "delete"
   }
 
-  // funky interpolation to silence compiler warning
-  def referenceTo(name: String): (String, String) = f"$$ref" -> s"#/definitions/$name"
+  def referenceTo(name: String): (String, String) = "$ref" -> s"#/definitions/$name"
 
 }
