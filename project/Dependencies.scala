@@ -8,6 +8,7 @@ object Version {
   final val uPickle             = "0.4.1"
   final val jsonSchemaValidator = "2.2.6"
   final val ammoniteOps         = "0.7.7"
+  final val moultingYaml        = "0.3.0"
 }
 
 object Lib {
@@ -17,4 +18,5 @@ object Lib {
   val upickle             = "com.lihaoyi"       %% "upickle"                % Version.uPickle
   val jsonSchemaValidator = "com.github.fge"     % "json-schema-validator"  % Version.jsonSchemaValidator
   val ammoniteOps         = "com.lihaoyi"       %% "ammonite-ops"           % Version.ammoniteOps
+  val moultingYaml        = "net.jcazevedo"     %% "moultingyaml"           % Version.moultingYaml
 }

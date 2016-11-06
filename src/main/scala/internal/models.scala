@@ -108,6 +108,16 @@ object models {
     required: Boolean
   )
 
+  object ApiSpec {
+    def fromSeqs(root: ApiRoot, paths: Seq[ApiPathDefinition], schemata: Seq[ApiSchemaDefinition]): ApiSpec = {
+      ApiSpec(
+        root,
+        paths.map(p => (p.path, p.metadata)).toMap,
+        schemata.map(s => (s.name, s.schema)).toMap
+      )
+    }
+  }
+
   case class ApiSpec(
     root: ApiRoot,
     paths: Map[String, ApiPath],

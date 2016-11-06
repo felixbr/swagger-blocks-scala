@@ -1,8 +1,9 @@
-package swaggerblocks.rendering
+package swaggerblocks.rendering.playJson
 
-import play.api.libs.json._
 import internal.models._
+import play.api.libs.json.{JsObject, _}
 import swaggerblocks._
+import swaggerblocks.rendering.writeLogic
 import swaggerblocks.s.PropertyType
 
 object formats {
@@ -10,28 +11,18 @@ object formats {
 
   implicit val apiLicenseWrites = Json.writes[ApiLicense]
 
-  implicit val apiExternalDocs = Json.writes[ApiExternalDocs]
+  implicit val apiExternalDocsWrites = Json.writes[ApiExternalDocs]
 
   implicit val apiInfoWrites = Json.writes[ApiInfo]
 
   implicit val apiRootWrites = Json.writes[ApiRoot]
 
   implicit val apiParameterInWrites = new Writes[ParameterIn] {
-    def writes(obj: ParameterIn): JsValue = JsString(obj match {
-      case Query    => "query"
-      case Header   => "header"
-      case Path     => "path"
-      case FormData => "formData"
-      case Body     => "body"
-    })
+    def writes(obj: ParameterIn): JsValue = JsString(writeLogic.parameterInToString(obj))
   }
 
   implicit val apiPropertyTypeWrites = new Writes[PropertyType] {
-    def writes(obj: PropertyType): JsValue = JsString(obj match {
-      case s.String => "string"
-      case s.Number => "number"
-      case s.Int    => "integer"
-    })
+    def writes(obj: PropertyType): JsValue = JsString(writeLogic.propertyTypeToString(obj))
   }
 
   implicit val apiPropertyWrites = new Writes[ApiProperty] {
@@ -92,15 +83,7 @@ object formats {
   }
 
   implicit val apiMethodWrites = new Writes[Method] {
-    def writes(obj: Method): JsValue = JsString(asString(obj))
-
-    def asString(obj: Method): String = obj match {
-      case GET    => "get"
-      case POST   => "post"
-      case PUT    => "put"
-      case PATCH  => "patch"
-      case DELETE => "delete"
-    }
+    def writes(obj: Method): JsValue = JsString(writeLogic.methodToString(obj))
   }
 
   implicit val apiParameterWrites = new Writes[ApiParameter] {
@@ -119,7 +102,7 @@ object formats {
     def writes(m: Map[Method, ApiOperation]): JsValue = {
       JsObject(
         m.map { case (method, op) =>
-          (apiMethodWrites.asString(method), Json.toJson(op))
+          (writeLogic.methodToString(method), Json.toJson(op))
         }
       )
     }

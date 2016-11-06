@@ -20,7 +20,7 @@ lazy val core = project.in(file("."))
   )
 
 lazy val play = project.in(file("swagger-blocks-play"))
-  .dependsOn(core)
+  .dependsOn(core % "compile;test->test")
   .settings(commonSettings: _*)
   .settings(publishSettings: _*)
   .settings(
@@ -30,8 +30,19 @@ lazy val play = project.in(file("swagger-blocks-play"))
     )
   )
 
+lazy val yaml = project.in(file("swagger-blocks-yaml"))
+  .dependsOn(core % "compile;test->test")
+  .settings(commonSettings: _*)
+  .settings(publishSettings: _*)
+  .settings(
+    name := "swagger-blocks-yaml",
+    libraryDependencies ++= commonDeps ++ List(
+      Lib.moultingYaml
+    )
+  )
+
 lazy val examples = project.in(file("examples"))
-    .dependsOn(play, core)
+    .dependsOn(play, yaml, core)
     .settings(commonSettings: _*)
     .settings(
       name := "swagger-blocks-examples"
@@ -39,13 +50,13 @@ lazy val examples = project.in(file("examples"))
 
 cancelable in Global := true
 
-scalacOptions ++= Seq(
+scalacOptions in Global ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8", // yes, this is 2 args
   "-feature",
   "-unchecked",
   "-Xfatal-warnings",
-  "-Xlint",
+  "-Xlint:-missing-interpolator",
   "-Yno-adapted-args",
   "-Ywarn-numeric-widen",
   //  "-Ywarn-value-discard",
