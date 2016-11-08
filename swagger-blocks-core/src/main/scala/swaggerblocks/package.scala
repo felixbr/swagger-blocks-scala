@@ -7,7 +7,7 @@ package object swaggerblocks {
   object s {
     sealed trait PropertyType
     case object String extends PropertyType
-    case object Int extends PropertyType
+    case object Int    extends PropertyType
     case object Number extends PropertyType
   }
 
@@ -67,7 +67,8 @@ package object swaggerblocks {
     )
   }
 
-  def operations(ops: ApiOperationDefinition*): List[ApiOperationDefinition] = ops.toList
+  def operations(ops: ApiOperationDefinition*): List[ApiOperationDefinition] =
+    ops.toList
 
   def operation(method: Method)(
     description: Option[String] = None,
@@ -152,6 +153,7 @@ package object swaggerblocks {
   }
 
   object Implicits {
-    implicit def stringToSomeString(string: String): Option[String] = Some(string)
+    implicit def stringToSomeString(string: String): Option[String] =
+      Some(string)
   }
 }

@@ -92,10 +92,10 @@ object models {
   ) extends ApiSchema
 
   sealed trait ApiSchemaRef
-  case class SingleRef(schema: ApiSchemaDefinition) extends ApiSchemaRef
+  case class SingleRef(schema: ApiSchemaDefinition)   extends ApiSchemaRef
   case class MultipleRef(schema: ApiSchemaDefinition) extends ApiSchemaRef
-  case class InlineSchema(schema: ApiSchema) extends ApiSchemaRef
-  case class MultipleInlineSchema(schema: ApiSchema) extends ApiSchemaRef
+  case class InlineSchema(schema: ApiSchema)          extends ApiSchemaRef
+  case class MultipleInlineSchema(schema: ApiSchema)  extends ApiSchemaRef
 
   case class ApiProperty(
     typ: PropertyType,
@@ -109,7 +109,11 @@ object models {
   )
 
   object ApiSpec {
-    def fromSeqs(root: ApiRoot, paths: Seq[ApiPathDefinition], schemata: Seq[ApiSchemaDefinition]): ApiSpec = {
+    def fromSeqs(
+      root: ApiRoot,
+      paths: Seq[ApiPathDefinition],
+      schemata: Seq[ApiSchemaDefinition]): ApiSpec = {
+
       ApiSpec(
         root,
         paths.map(p => (p.path, p.metadata)).toMap,

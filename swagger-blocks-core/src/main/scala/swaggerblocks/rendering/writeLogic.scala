@@ -27,6 +27,7 @@ object writeLogic {
     case DELETE => "delete"
   }
 
-  def referenceTo(name: String): (String, String) = "$ref" -> s"#/definitions/$name"
+  def referenceTo(name: String): (String, String) =
+    "$ref" -> s"#/definitions/$name"
 
 }

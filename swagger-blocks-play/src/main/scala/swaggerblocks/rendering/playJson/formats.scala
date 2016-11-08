@@ -18,11 +18,13 @@ object formats {
   implicit val apiRootWrites = Json.writes[ApiRoot]
 
   implicit val apiParameterInWrites = new Writes[ParameterIn] {
-    def writes(obj: ParameterIn): JsValue = JsString(writeLogic.parameterInToString(obj))
+    def writes(obj: ParameterIn): JsValue =
+      JsString(writeLogic.parameterInToString(obj))
   }
 
   implicit val apiPropertyTypeWrites = new Writes[PropertyType] {
-    def writes(obj: PropertyType): JsValue = JsString(writeLogic.propertyTypeToString(obj))
+    def writes(obj: PropertyType): JsValue =
+      JsString(writeLogic.propertyTypeToString(obj))
   }
 
   implicit val apiPropertyWrites = new Writes[ApiProperty] {
@@ -101,8 +103,9 @@ object formats {
   implicit val apiOperationMapWrites = new Writes[Map[Method, ApiOperation]] {
     def writes(m: Map[Method, ApiOperation]): JsValue = {
       JsObject(
-        m.map { case (method, op) =>
-          (writeLogic.methodToString(method), Json.toJson(op))
+        m.map {
+          case (method, op) =>
+            (writeLogic.methodToString(method), Json.toJson(op))
         }
       )
     }

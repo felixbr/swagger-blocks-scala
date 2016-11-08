@@ -19,14 +19,16 @@ object formats extends DefaultYamlProtocol {
   implicit val apiRoot = yamlFormat5(ApiRoot)
 
   implicit val apiParameterIn = new YamlFormat[ParameterIn] {
-    def write(obj: ParameterIn): YamlValue = YamlString(writeLogic.parameterInToString(obj))
+    def write(obj: ParameterIn): YamlValue =
+      YamlString(writeLogic.parameterInToString(obj))
 
     def read(yaml: YamlValue): ParameterIn = ???
   }
 
   // use format instead of writer to enable usage of 'yamlFormat2()' helper for ApiProperty
   implicit val apiPropertyType = new YamlFormat[PropertyType] {
-    def write(obj: PropertyType): YamlValue = YamlString(writeLogic.propertyTypeToString(obj))
+    def write(obj: PropertyType): YamlValue =
+      YamlString(writeLogic.propertyTypeToString(obj))
 
     def read(yaml: YamlValue): PropertyType = ???
   }
@@ -55,7 +57,7 @@ object formats extends DefaultYamlProtocol {
         }.toMap[String, ApiProperty]
 
         Map(
-          "required" -> requiredAttributes.toYaml,
+          "required"   -> requiredAttributes.toYaml,
           "properties" -> properties.toYaml
         ).toYaml
 
@@ -90,7 +92,7 @@ object formats extends DefaultYamlProtocol {
 
       case MultipleInlineSchema(schema) =>
         Map(
-          "type" -> "array".toYaml,
+          "type"  -> "array".toYaml,
           "items" -> schema.toYaml
         ).toYaml
     }
@@ -106,7 +108,8 @@ object formats extends DefaultYamlProtocol {
     def write(obj: ApiParameter): YamlValue = {
       val yaml = obj.toYaml(yamlFormat6(ApiParameter)).asYamlObject
 
-      val fieldsWithReplacedType = (yaml.fields - YamlString("typ")) + (YamlString("type") -> obj.typ.toYaml)
+      val fieldsWithReplacedType = (yaml.fields - YamlString("typ")) +
+          (YamlString("type") -> obj.typ.toYaml)
       yaml.copy(fields = fieldsWithReplacedType)
     }
 
@@ -119,8 +122,9 @@ object formats extends DefaultYamlProtocol {
 
   implicit val apiOperationMap = new YamlWriter[Map[Method, ApiOperation]] {
     def write(m: Map[Method, ApiOperation]): YamlValue = {
-      m.map { case (method, op) =>
-        (writeLogic.methodToString(method), op)
+      m.map {
+        case (method, op) =>
+          (writeLogic.methodToString(method), op)
       }.toYaml
     }
   }
@@ -135,7 +139,7 @@ object formats extends DefaultYamlProtocol {
     def write(spec: ApiSpec): YamlValue = {
       val rootFields = spec.root.toYaml.asYamlObject.fields
       val restFields = Map(
-        "paths".toYaml -> spec.paths.toYaml,
+        "paths".toYaml       -> spec.paths.toYaml,
         "definitions".toYaml -> spec.definitions.toYaml
       )
 
