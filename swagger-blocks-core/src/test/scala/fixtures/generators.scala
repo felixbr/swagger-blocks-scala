@@ -76,7 +76,7 @@ object generators {
   // PATHS
 
   lazy val genApiPathDefinition = for {
-    path <- A.arbitrary[String]
+    path <- Gen.identifier.map(s => s"/$s")
     pathDefinition <- genApiPath
   } yield ApiPathDefinition(path, pathDefinition)
 
@@ -89,6 +89,22 @@ object generators {
     apiOperation <- genApiOperation
   } yield (method, apiOperation)
 
-  lazy val genApiOperation = A.arbitrary(implicitly[Arbitrary[ApiOperation]])
-    .retryUntil(_ => true)
+  lazy val genApiOperation = for {
+    description <- Gen.option(Gen.alphaNumStr)
+    summary <- Gen.option(Gen.alphaNumStr)
+    tags <- Gen.listOf(Gen.identifier).map(_.distinct.take(2))
+    parameters <- Gen.listOf(genApiParameter).map(_.take(2))
+    responses <- genResponses
+  } yield ApiOperation(description, summary, tags, parameters, responses)
+
+  lazy val genResponses = for {
+    rs <- Gen.nonEmptyListOf(genApiReponse).map(_.take(2))
+  } yield rs.toMap[String, ApiResponse]
+
+  lazy val genApiReponse = for {
+    status <- Gen.oneOf("default", "200", "201", "302", "400", "404", "500")
+    response <- A.arbitrary[ApiResponse]
+  } yield (status, response)
+
+  lazy val genApiParameter = A.arbitrary[ApiParameter]
 }
