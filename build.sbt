@@ -65,6 +65,8 @@ lazy val examples = project.in(file("examples"))
 
 cancelable in Global := true
 
+scalafmtConfig in Global := Some(file(".scalafmt.conf"))
+
 scalacOptions in Global ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8", // yes, this is 2 args
