@@ -1,7 +1,7 @@
-package swaggerblocks.rendering
+package internal
 
+import internal.{propertyTypes => s}
 import swaggerblocks._
-import swaggerblocks.s.PropertyType
 
 object writeLogic {
 
@@ -13,10 +13,12 @@ object writeLogic {
     case Body     => "body"
   }
 
-  def propertyTypeToString(obj: PropertyType): String = obj match {
-    case s.String => "string"
-    case s.Number => "number"
-    case s.Int    => "integer"
+  def propertyTypeToString(obj: s.PropertyType): String = obj match {
+    case s.String(_) => "string"
+    case s.Number(_) => "number"
+    case s.Int(_)    => "integer"
+    case s.Boolean   => "boolean"
+    case s.File      => "file"
   }
 
   def methodToString(obj: Method): String = obj match {
@@ -27,7 +29,11 @@ object writeLogic {
     case DELETE => "delete"
   }
 
-  def referenceTo(name: String): (String, String) =
-    "$ref" -> s"#/definitions/$name"
+  def referenceTo(name: String): String =
+    s"#/definitions/$name"
+
+  def classNameToString(obj: Any): String = {
+    obj.getClass.getName.split('$').last
+  }
 
 }

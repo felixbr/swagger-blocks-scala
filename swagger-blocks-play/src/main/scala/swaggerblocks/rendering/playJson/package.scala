@@ -4,12 +4,13 @@ import internal.models._
 import play.api.libs.json._
 import swaggerblocks.RenderingPackage
 import swaggerblocks.rendering.playJson.formats._
+import internal.modelTransformations.transformSpec
 
 package object playJson extends RenderingPackage {
   def render(
     root: ApiRoot,
-    paths: Seq[ApiPathDefinition],
-    schemata: Seq[ApiSchemaDefinition]): String = {
+    paths: List[ApiPathDefinition],
+    schemata: List[ApiSchemaDefinition]): String = {
 
     Json.stringify(
       jsonAst(root, paths, schemata)
@@ -18,8 +19,8 @@ package object playJson extends RenderingPackage {
 
   def renderPretty(
     root: ApiRoot,
-    paths: Seq[ApiPathDefinition],
-    schemata: Seq[ApiSchemaDefinition]): String = {
+    paths: List[ApiPathDefinition],
+    schemata: List[ApiSchemaDefinition]): String = {
 
     Json.prettyPrint(
       jsonAst(root, paths, schemata)
@@ -28,11 +29,11 @@ package object playJson extends RenderingPackage {
 
   def jsonAst(
     root: ApiRoot,
-    paths: Seq[ApiPathDefinition],
-    schemata: Seq[ApiSchemaDefinition]): JsValue = {
+    paths: List[ApiPathDefinition],
+    schemata: List[ApiSchemaDefinition]): JsValue = {
 
     Json.toJson(
-      ApiSpec.fromSeqs(root, paths, schemata)
+      transformSpec(ApiSpec(root, paths, schemata))
     )
   }
 }

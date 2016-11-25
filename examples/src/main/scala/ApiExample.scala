@@ -1,5 +1,7 @@
 import swaggerblocks._
-import swaggerblocks.Implicits.stringToSomeString
+import swaggerblocks.Implicits._
+
+// format: off
 
 object ApiExample extends App {
 
@@ -30,13 +32,11 @@ object ApiExample extends App {
         tags = List("pet"),
 
         parameters = List(
-          parameter(
+          queryParameter(
             name = "tags",
-            in = Query,
             required = false,
-            typ = s.String,
-            description = "tags to filter by",
-            schema = None
+            schema = parameter.manyOf(t.string),
+            description = "tags to filter by"
           )
         ),
 
@@ -52,17 +52,76 @@ object ApiExample extends App {
 
   lazy val petSchema = swaggerSchema("Pet")(
     property("id")(
-      typ = s.Int
+      schema = t.integer
     ),
 
     property("name")(
-      typ = s.String,
+      schema = t.string,
       description = "Name of the pet"
     ),
 
     property("tag")(
-      typ = s.String,
+      schema = t.string,
       required = false
+    )
+  )
+
+  lazy val feedingPath = swaggerPath("/feedingtimes")(
+    operations = List(
+      operation(GET)(
+        parameters = List(
+          bodyParameter(
+            name = "Pets",
+            required = true,
+            schema = manyOf(t.string),
+            description = "List of pets you want to feed",
+            enum = List("cat", "bird")
+          ),
+          queryParameter(
+            name = "filter",
+            schema = t.string,
+            required = false
+          )
+        ),
+
+        responses = List(
+          response(200)(
+            schema = feedingPetList
+          )
+        )
+      )
+    )
+  )
+
+  lazy val feedingPetList = swaggerSchema("FeedingPetList")(
+    property("petsToFeed")(
+      schema = manyOf(feedingPetListItem),
+      description = "Pets to feed"
+    )
+  )
+
+  lazy val feedingPetListItem = swaggerSchema("FeedingPetListItem")(
+    property("id")(
+      schema = t.integer
+    ),
+    property("pet")(
+      schema = petSchema,
+      description = "Pet that has to be fed"
+    ),
+    property("foodBrand")(
+      schema = t.string,
+      description = "Brand the pet likes",
+      enum = List("a", "b", "c")
+    )
+  )
+
+  lazy val foodSchema = swaggerSchema("Food")(
+    property("name")(
+      schema = t.string
+    ),
+
+    property("likedBy")(
+      schema = manyOf(petSchema)
     )
   )
 

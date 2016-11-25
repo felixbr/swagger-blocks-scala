@@ -1,10 +1,12 @@
 package swaggerblocks.rendering.playJson
 
 import internal.models._
-import play.api.libs.json.{JsObject, _}
+import internal.propertyTypes.PropertyType
+import internal.specModels._
+import internal.writeLogic
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 import swaggerblocks._
-import swaggerblocks.rendering.writeLogic
-import swaggerblocks.s.PropertyType
 
 object formats {
   implicit val apiContactWrites = Json.writes[ApiContact]
@@ -27,100 +29,31 @@ object formats {
       JsString(writeLogic.propertyTypeToString(obj))
   }
 
-  implicit val apiPropertyWrites = new Writes[ApiProperty] {
-    def writes(obj: ApiProperty): JsValue = {
-      val json = Json.toJson(obj)(Json.writes[ApiProperty]).as[JsObject]
+  implicit lazy val optionSpecSchemaWrites = Writes.OptionWrites[SpecSchema]
 
-      (json - "typ") + ("type" -> Json.toJson(obj.typ))
-    }
-  }
+  implicit lazy val specSchemaMapWrites = Writes.map[SpecSchema]
 
-  implicit val apiSchemaWrites = new Writes[ApiSchema] {
-    def writes(obj: ApiSchema): JsValue = obj match {
-      case ApiObjectSchema(propdefs) =>
-        Json.obj(
-          "required" -> propdefs.collect {
-            case ApiPropertyDefinition(name, p, true) => JsString(name)
-          },
-          "properties" -> JsObject(
-            propdefs.map { p =>
-              (p.name, Json.toJson(p.prop))
-            }
-          )
-        )
+  implicit lazy val specSchemaWrites: Writes[SpecSchema] = (
+    (__ \ "$ref").writeNullable[String] and
+      (__ \ "type").writeNullable[String] and
+      (__ \ "format").writeNullable[String] and
+      (__ \ "title").writeNullable[String] and
+      (__ \ "description").writeNullable[String] and
+      (__ \ "required").writeNullable[List[String]] and
+      (__ \ "enum").writeNullable[List[String]] and
+      (__ \ "items").lazyWriteNullable[SpecSchema](specSchemaWrites) and
+      (__ \ "properties").lazyWriteNullable[Map[SpecSchemaName, SpecSchema]](specSchemaMapWrites)
+  )(unlift(SpecSchema.unapply))
 
-      case ApiValueSchema(typ) =>
-        Json.obj(
-          "type" -> Json.toJson(typ)
-        )
-    }
-  }
+  implicit val specResponseWrites = Json.writes[SpecResponse]
 
-  implicit val apiSchemaDefinitionWrites = Json.writes[ApiSchemaDefinition]
+  implicit val specParameterWrites = Json.writes[SpecParameter]
 
-  implicit val apiSchemaRefWrites = new Writes[ApiSchemaRef] {
-    def writes(obj: ApiSchemaRef): JsValue = obj match {
-      case SingleRef(ApiSchemaDefinition(name, schema)) =>
-        Json.obj(
-          "$ref" -> JsString(s"#/definitions/$name")
-        )
+  implicit val specOperationWrites = Json.writes[SpecOperation]
 
-      case MultipleRef(ApiSchemaDefinition(name, schema)) =>
-        Json.obj(
-          "type" -> JsString("array"),
-          "items" -> Json.obj(
-            "$ref" -> JsString(s"#/definitions/$name")
-          )
-        )
+  implicit val specPathMapWrites: Writes[Map[SpecPath, Map[SpecMethod, SpecOperation]]] =
+    Writes.map(Writes.map[SpecOperation])
 
-      case InlineSchema(schema) =>
-        Json.toJson(schema)
+  implicit val specWrites = Json.writes[Spec]
 
-      case MultipleInlineSchema(schema) =>
-        Json.obj(
-          "type" -> JsString("array"),
-          "items" -> Json.toJson(schema)
-        )
-    }
-  }
-
-  implicit val apiMethodWrites = new Writes[Method] {
-    def writes(obj: Method): JsValue = JsString(writeLogic.methodToString(obj))
-  }
-
-  implicit val apiParameterWrites = new Writes[ApiParameter] {
-    def writes(p: ApiParameter): JsValue = {
-      val json = Json.toJson(p)(Json.writes[ApiParameter]).as[JsObject]
-
-      (json - "typ") + ("type" -> Json.toJson(p.typ))
-    }
-  }
-
-  implicit val apiResponseWrites = Json.writes[ApiResponse]
-
-  implicit val apiOperationWrites = Json.writes[ApiOperation]
-
-  implicit val apiOperationMapWrites = new Writes[Map[Method, ApiOperation]] {
-    def writes(m: Map[Method, ApiOperation]): JsValue = {
-      JsObject(
-        m.map {
-          case (method, op) =>
-            (writeLogic.methodToString(method), Json.toJson(op))
-        }
-      )
-    }
-  }
-
-  implicit val apiPathWrites = new Writes[ApiPath] {
-    def writes(obj: ApiPath): JsValue = Json.toJson(obj.operations)
-  }
-
-  implicit val apiSpecWrites = new Writes[ApiSpec] {
-    def writes(spec: ApiSpec): JsValue = {
-      Json.toJson(spec.root).as[JsObject] ++ Json.obj(
-        "paths" -> spec.paths,
-        "definitions" -> spec.definitions
-      )
-    }
-  }
 }

@@ -1,7 +1,7 @@
 package internal
 
 import swaggerblocks._
-import swaggerblocks.s.PropertyType
+import propertyTypes.PropertyType
 
 object models {
 
@@ -60,14 +60,41 @@ object models {
     operation: ApiOperation
   )
 
-  case class ApiParameter(
+  sealed trait ApiParameter {
+    def name: String
+    def in: ParameterIn
+    def required: Boolean
+    def description: Option[String]
+  }
+  case class ApiBodyParameter(
+    name: String,
+    required: Boolean,
+    schema: ApiSchemaRef,
+    description: Option[String],
+    enum: List[String]
+  ) extends ApiParameter {
+    val in = Body
+  }
+  case class ApiOtherParameter(
     name: String,
     in: ParameterIn,
     required: Boolean,
-    typ: PropertyType,
+    schema: ApiParameterSchema,
     description: Option[String],
-    schema: Option[ApiSchemaRef]
-  )
+    enum: List[String]
+  ) extends ApiParameter
+
+  sealed trait ApiParameterSchema
+  case class ApiParameterArraySchema(
+    itemsSchema: ApiParameterSchema
+  ) extends ApiParameterSchema
+  case class ApiParameterValueSchema(
+    typ: PropertyType
+  ) extends ApiParameterSchema
+
+//  sealed trait ApiParameterSchemaRef
+//  case class SingleParameterSchemaRef(parameterSchema: ApiParameterSchema)   extends ApiParameterSchemaRef
+//  case class MultipleParamSchemaRef(parameterSchema: ApiParameterSchema) extends ApiParameterSchemaRef
 
   case class ApiResponse(
     description: Option[String],
@@ -82,13 +109,13 @@ object models {
   case class ApiSchemaDefinition(name: String, schema: ApiSchema)
 
   sealed trait ApiSchema
-
   case class ApiObjectSchema(
     properties: List[ApiPropertyDefinition]
   ) extends ApiSchema
-
   case class ApiValueSchema(
-    typ: PropertyType
+    typ: PropertyType,
+    description: Option[String] = None,
+    enum: List[String] = List.empty
   ) extends ApiSchema
 
   sealed trait ApiSchemaRef
@@ -97,34 +124,16 @@ object models {
   case class InlineSchema(schema: ApiSchema)          extends ApiSchemaRef
   case class MultipleInlineSchema(schema: ApiSchema)  extends ApiSchemaRef
 
-  case class ApiProperty(
-    typ: PropertyType,
+  case class ApiPropertyDefinition(
+    name: String,
+    prop: ApiSchemaRef,
+    required: Boolean,
     description: Option[String]
   )
 
-  case class ApiPropertyDefinition(
-    name: String,
-    prop: ApiProperty,
-    required: Boolean
-  )
-
-  object ApiSpec {
-    def fromSeqs(
-      root: ApiRoot,
-      paths: Seq[ApiPathDefinition],
-      schemata: Seq[ApiSchemaDefinition]): ApiSpec = {
-
-      ApiSpec(
-        root,
-        paths.map(p => (p.path, p.metadata)).toMap,
-        schemata.map(s => (s.name, s.schema)).toMap
-      )
-    }
-  }
-
   case class ApiSpec(
     root: ApiRoot,
-    paths: Map[String, ApiPath],
-    definitions: Map[String, ApiSchema]
+    paths: List[ApiPathDefinition],
+    schemata: List[ApiSchemaDefinition]
   )
 }

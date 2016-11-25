@@ -1,5 +1,5 @@
 val commonSettings = Seq(
-  version := "0.1.1",
+  version := "0.2.0",
   scalaVersion := Version.scala,
   homepage := Some(url("https://github.com/felixbr/swagger-blocks-scala")),
   organization := "io.github.felixbr",
@@ -62,6 +62,7 @@ lazy val yaml = project
 
 lazy val examples = project
   .in(file("examples"))
+  .enablePlugins(PlayScala)
   .dependsOn(play, yaml, core)
   .settings(commonSettings: _*)
   .settings(

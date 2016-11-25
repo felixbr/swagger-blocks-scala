@@ -1,7 +1,7 @@
 package fixtures
 
 import swaggerblocks._
-import swaggerblocks.Implicits.stringToSomeString
+import swaggerblocks.Implicits._
 
 object PetstoreAPI {
 
@@ -40,13 +40,11 @@ object PetstoreAPI {
         tags = List("pet"),
 
         parameters = List(
-          parameter(
+          queryParameter(
             name = "tags",
-            in = Query,
             required = false,
-            typ = s.String,
-            description = "tags to filter by",
-            schema = None
+            schema = parameter.oneOf(t.string),
+            description = "tags to filter by"
           )
         ),
 
@@ -62,16 +60,16 @@ object PetstoreAPI {
 
   lazy val petSchema = swaggerSchema("Pet")(
     property("id")(
-      typ = s.Int
+      schema = t.integer
     ),
 
     property("name")(
-      typ = s.String,
+      schema = t.string,
       description = "Name of the pet"
     ),
 
     property("tag")(
-      typ = s.String,
+      schema = t.string,
       required = false
     )
   )
