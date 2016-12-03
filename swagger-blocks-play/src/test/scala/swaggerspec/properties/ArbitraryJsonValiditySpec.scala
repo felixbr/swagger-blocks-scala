@@ -15,7 +15,7 @@ class ArbitraryJsonValiditySpec
     with GeneratorDrivenPropertyChecks {
 
   "A spec with generated ApiRoot" when {
-    "using 'renderPretty'" should {
+    "using 'renderPretty'" must {
       "produce valid swagger json" in {
         forAll(genApiRoot) { apiRoot =>
           val json = renderPretty(apiRoot, List.empty, List.empty)
@@ -27,10 +27,22 @@ class ArbitraryJsonValiditySpec
   }
 
   "A spec with generated ApiPathDefinition" when {
-    "using 'renderPretty'" should {
+    "using 'renderPretty'" must {
       "produce valid swagger json" in {
         forAll(genApiPathDefinition) { apiPathDefinition =>
           val json = renderPretty(P.petstoreRoot, List(apiPathDefinition), List.empty)
+
+          json must beValidSwaggerJson
+        }
+      }
+    }
+  }
+
+  "A spec with generated ApiSchemaDefinitions" when {
+    "using 'renderPretty'" must {
+      "preoduce valid swagger json" in {
+        forAll(genSchemaDefs()) { apiSchemaDefinitions =>
+          val json = renderPretty(P.petstoreRoot, List.empty, apiSchemaDefinitions)
 
           json must beValidSwaggerJson
         }

@@ -7,13 +7,13 @@ import matchers._
 trait CustomMatchers {
 
   val beValidSwaggerJson =
-    Matcher { (left: String) =>
-      val validationReport: ProcessingReport = JsonValidator.validateWithReport(left)
+    Matcher { (leftSideJson: String) =>
+      val validationReport: ProcessingReport = JsonValidator.validateWithReport(leftSideJson)
 
       MatchResult(
         validationReport.isSuccess,
-        s"${validationReport.toString}\n$left",
-        s"'$left' is valid swagger json"
+        s"${validationReport.toString}\n$leftSideJson",
+        s"'$leftSideJson' is valid swagger json"
       )
     }
 }

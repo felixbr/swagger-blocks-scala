@@ -5,7 +5,7 @@ import internal.propertyTypes
 import internal.propertyFormats
 import internal.propertyTypes.PropertyType
 import org.scalacheck._
-import org.scalacheck.{Arbitrary => A}
+import org.scalacheck.Arbitrary._
 import org.scalacheck.Shapeless._
 import org.scalacheck.rng.Seed
 import swaggerblocks._
@@ -39,9 +39,9 @@ object generators {
 
   def genPropertyType(includeFile: Boolean = false): Gen[PropertyType] =
     for {
-      stringFormat  <- A.arbitrary[propertyFormats.StringFormat]
-      numberFormat  <- A.arbitrary[propertyFormats.NumberFormat]
-      integerFormat <- A.arbitrary[propertyFormats.IntegerFormat]
+      stringFormat  <- arbitrary[propertyFormats.StringFormat]
+      numberFormat  <- arbitrary[propertyFormats.NumberFormat]
+      integerFormat <- arbitrary[propertyFormats.IntegerFormat]
       propertyType <- Gen.oneOf[PropertyType](
         propertyTypes.String(stringFormat),
         propertyTypes.Number(numberFormat),
@@ -66,6 +66,9 @@ object generators {
     for {
       schemaDef <- genSchemaDef(depth)
     } yield MultipleRef(schemaDef)
+
+  def genSchemaDefs(depth: Int = 0): Gen[List[ApiSchemaDefinition]] =
+    Gen.listOfN(3, genSchemaDef(depth))
 
   def genSchemaDef(depth: Int = 0) =
     for {
@@ -98,7 +101,7 @@ object generators {
     for {
       name        <- Gen.identifier
       prop        <- genSchemaRef(depth + 1) // recursive!
-      required    <- A.arbitrary[Boolean]
+      required    <- arbitrary[Boolean]
       description <- genDescription
     } yield ApiPropertyDefinition(name, prop, required, description)
 
@@ -128,10 +131,10 @@ object generators {
 
   lazy val genApiRoot = for {
     swagger      <- Gen.const("2.0")
-    host         <- A.arbitrary[Option[String]].retryUntil(!_.contains(""))
+    host         <- arbitrary[Option[String]].retryUntil(!_.contains(""))
     basePath     <- genBasePath
     info         <- genApiInfo
-    externalDocs <- A.arbitrary[Option[ApiExternalDocs]]
+    externalDocs <- arbitrary[Option[ApiExternalDocs]]
   } yield ApiRoot(swagger, host, Some(basePath), info, externalDocs)
 
   lazy val genApiExternalDocs = for {
@@ -140,16 +143,16 @@ object generators {
   } yield ApiExternalDocs(url, description)
 
   lazy val genApiInfo: Gen[ApiInfo] = for {
-    version        <- A.arbitrary[String]
-    title          <- A.arbitrary[String]
-    description    <- A.arbitrary[Option[String]]
-    termsOfService <- A.arbitrary[Option[String]]
+    version        <- arbitrary[String]
+    title          <- arbitrary[String]
+    description    <- arbitrary[Option[String]]
+    termsOfService <- arbitrary[Option[String]]
     contact        <- genApiContact
-    license        <- A.arbitrary(implicitly[Arbitrary[Option[ApiLicense]]])
+    license        <- arbitrary(implicitly[Arbitrary[Option[ApiLicense]]])
   } yield ApiInfo(version, title, description, termsOfService, Some(contact), license)
 
   lazy val genApiContact = for {
-    name <- A.arbitrary[Option[String]]
+    name <- arbitrary[Option[String]]
     url = "http://foo.bar/?baz=qux#quux" // not checked right now
     email <- genEmail
   } yield ApiContact(name, Some(url), Some(email))
@@ -166,7 +169,7 @@ object generators {
   } yield ApiPath(operationsList.toMap)
 
   lazy val genOperation = for {
-    method       <- A.arbitrary[Method]
+    method       <- arbitrary[Method]
     apiOperation <- genApiOperation
   } yield (method, apiOperation)
 
@@ -201,7 +204,7 @@ object generators {
 
   lazy val genApiBodyParameter: Gen[ApiParameter] = for {
     name        <- Gen.alphaNumStr
-    required    <- A.arbitrary[Boolean]
+    required    <- arbitrary[Boolean]
     schema      <- genSchemaRef()
     description <- Gen.option(Gen.alphaNumStr)
     enum        <- genEnum
@@ -216,7 +219,7 @@ object generators {
 
   lazy val genApiQueryParameter: Gen[ApiParameter] = for {
     name        <- Gen.alphaNumStr
-    required    <- A.arbitrary[Boolean]
+    required    <- arbitrary[Boolean]
     schema      <- genApiParameterSchema()
     description <- genDescription
     enum        <- genEnum
@@ -224,7 +227,7 @@ object generators {
 
   lazy val genApiHeaderParameter: Gen[ApiParameter] = for {
     name        <- Gen.identifier
-    required    <- A.arbitrary[Boolean]
+    required    <- arbitrary[Boolean]
     schema      <- genApiParameterSchema()
     description <- genDescription
     enum        <- genEnum
@@ -232,7 +235,7 @@ object generators {
 
   lazy val genApiFormDataParameter: Gen[ApiParameter] = for {
     name        <- Gen.alphaNumStr
-    required    <- A.arbitrary[Boolean]
+    required    <- arbitrary[Boolean]
     schema      <- genApiParameterSchema()
     description <- genDescription
     enum        <- genEnum
