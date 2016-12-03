@@ -74,6 +74,12 @@ lazy val examples = project
 
 cancelable in Global := true
 
+initialCommands in console in core in Test :=
+  """
+    |import fixtures.generators._
+    |import org.scalacheck._
+  """.stripMargin
+
 scalacOptions in Global ++= Seq(
   "-deprecation",
   "-encoding",
