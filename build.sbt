@@ -1,5 +1,5 @@
 val commonSettings = Seq(
-  version := "0.2.0",
+  version := "0.2.1",
   scalaVersion := Version.scala,
   homepage := Some(url("https://github.com/felixbr/swagger-blocks-scala")),
   organization := "io.github.felixbr",
@@ -19,6 +19,8 @@ val commonDeps = Seq(
 lazy val root = project
   .in(file("."))
   .aggregate(core, play, yaml)
+  .settings(commonSettings: _*)
+  .settings(publishSettings: _*)
   .settings(
     publishArtifact := false,
     publish := {},

@@ -25,7 +25,7 @@ The library is published on Sonatype:
 
 There is a core modul available for the DSL and core data types:
 
-    "io.github.felixbr" %% "swagger-blocks-scala" % "0.2.0"
+    "io.github.felixbr" %% "swagger-blocks-scala" % "0.2.1"
 
 The plan is to provide bindings for the most popular json libs, but right now 
 only play-json and moultingyaml are supported. The extensions also include the core lib, so 
@@ -33,11 +33,11 @@ you only need to specify the extension you want to use:
 
 #### play-json (2.5.9)
 
-    "io.github.felixbr" %% "swagger-blocks-play" % "0.2.0"
+    "io.github.felixbr" %% "swagger-blocks-play" % "0.2.1"
     
 #### moultingyaml (0.3.1)
 
-    "io.github.felixbr" %% "swagger-blocks-yaml" % "0.2.0
+    "io.github.felixbr" %% "swagger-blocks-yaml" % "0.2.1
     
 ### Writing Swagger Path and Schema specifications
     
