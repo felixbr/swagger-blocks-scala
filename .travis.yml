@@ -27,4 +27,4 @@ addons:
     packages:
       - oracle-java8-installer
 
-script: sbt ++$TRAVIS_SCALA_VERSION play/test
+script: sbt ++$TRAVIS_SCALA_VERSION test
