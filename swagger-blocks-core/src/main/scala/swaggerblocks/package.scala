@@ -265,7 +265,7 @@ package object swaggerblocks {
   def responses(rs: ApiResponse*): List[ApiResponse] = rs.toList
 
   def response(statusCode: Int)(
-    description: Option[String] = None,
+    description: String,
     schema: Option[ApiSchemaRef] = None
   ): ApiResponseDefinition = {
     ApiResponseDefinition(

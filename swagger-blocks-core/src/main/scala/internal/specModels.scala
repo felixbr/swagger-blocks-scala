@@ -32,7 +32,7 @@ object specModels {
   )
 
   case class SpecResponse(
-    description: Option[String] = None,
+    description: String,
     schema: Option[SpecSchema] = None
   )
 

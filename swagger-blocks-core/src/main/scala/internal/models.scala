@@ -97,7 +97,7 @@ object models {
 //  case class MultipleParamSchemaRef(parameterSchema: ApiParameterSchema) extends ApiParameterSchemaRef
 
   case class ApiResponse(
-    description: Option[String],
+    description: String,
     schema: Option[ApiSchemaRef]
   )
 
