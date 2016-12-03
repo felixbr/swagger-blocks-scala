@@ -12,7 +12,13 @@ class ArbitraryJsonValiditySpec
     with Checkers
     with MustMatchers
     with CustomMatchers
-    with GeneratorDrivenPropertyChecks {
+    with GeneratorDrivenPropertyChecks
+    with ParallelTestExecution {
+
+  implicit override val generatorDrivenConfig = PropertyCheckConfiguration(
+    sizeRange = 10,
+    workers = 4
+  )
 
   "A spec with generated ApiRoot" when {
     "using 'renderPretty'" must {

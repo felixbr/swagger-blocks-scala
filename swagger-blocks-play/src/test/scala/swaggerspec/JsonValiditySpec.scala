@@ -1,12 +1,16 @@
 package swaggerspec
 
-import org.scalatest._
-import helpers.JsonValidator.validate
-import swaggerblocks.rendering.playJson._
 import fixtures.{PetstoreAPI => P}
 import helpers.CustomMatchers
+import org.scalatest._
+import swaggerblocks.rendering.playJson._
 
-class JsonValiditySpec extends WordSpec with MustMatchers with CustomMatchers {
+class JsonValiditySpec
+    extends WordSpec
+    with MustMatchers
+    with CustomMatchers
+    with ParallelTestExecution {
+
   "The petstore example spec" when {
     "using 'render'" should {
       "produce valid swagger json" in {

@@ -35,7 +35,9 @@ object generators {
 
   lazy val genDescription = Gen.option(Gen.alphaNumStr)
 
-  lazy val genEnum = Gen.listOf(Gen.identifier)
+  lazy val genEnum = Gen.listOfN(3, Gen.identifier).map(_.distinct)
+
+  lazy val genUrl = Gen.const("http://foo.bar/?baz=qux#quux")
 
   def genPropertyType(includeFile: Boolean = false): Gen[PropertyType] =
     for {
@@ -134,12 +136,12 @@ object generators {
     host         <- arbitrary[Option[String]].retryUntil(!_.contains(""))
     basePath     <- genBasePath
     info         <- genApiInfo
-    externalDocs <- arbitrary[Option[ApiExternalDocs]]
-  } yield ApiRoot(swagger, host, Some(basePath), info, externalDocs)
+    externalDocs <- genApiExternalDocs
+  } yield ApiRoot(swagger, host, Some(basePath), info, Some(externalDocs))
 
   lazy val genApiExternalDocs = for {
     description <- genDescription
-    url = "http://foo.bar/?baz=qux#quux" // not checked right now
+    url <- genUrl
   } yield ApiExternalDocs(url, description)
 
   lazy val genApiInfo: Gen[ApiInfo] = for {
@@ -153,9 +155,14 @@ object generators {
 
   lazy val genApiContact = for {
     name <- arbitrary[Option[String]]
-    url = "http://foo.bar/?baz=qux#quux" // not checked right now
+    url <- genUrl
     email <- genEmail
   } yield ApiContact(name, Some(url), Some(email))
+
+  lazy val genApiLicense = for {
+    name <- Gen.identifier
+    url <- genUrl
+  } yield ApiLicense(name, Some(url))
 
   // PATHS
 
@@ -177,7 +184,7 @@ object generators {
     description <- Gen.option(Gen.alphaNumStr)
     summary     <- Gen.option(Gen.alphaNumStr)
     tags        <- Gen.listOf(Gen.identifier).map(_.distinct.take(2))
-    parameters  <- Gen.listOf(genApiParameter).map(_.take(2))
+    parameters  <- genApiParameters
     responses   <- genResponses
   } yield ApiOperation(description, summary, tags, parameters, responses)
 
@@ -194,7 +201,15 @@ object generators {
     description <- Gen.alphaNumStr
   } yield ApiResponse(description, schema = None) // TODO schemaRef
 
-  val genApiParameter: Gen[ApiParameter] = Gen.oneOf(
+  lazy val genApiParameters: Gen[List[ApiParameter]] =
+    for {
+      header <- genApiHeaderParameter
+      path   <- genApiPathParameter
+      query  <- genApiQueryParameter
+      body   <- genApiBodyParameter
+    } yield List(header, path, query, body)
+
+  lazy val genApiParameter: Gen[ApiParameter] = Gen.oneOf(
     genApiBodyParameter,
     genApiPathParameter,
     genApiQueryParameter,
