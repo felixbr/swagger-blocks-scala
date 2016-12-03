@@ -188,7 +188,7 @@ package object swaggerblocks {
       ApiOperation(
         description,
         summary,
-        tags,
+        tags.distinct,
         parameters,
         responses.map(r => (r.status, r.response)).toMap
       )

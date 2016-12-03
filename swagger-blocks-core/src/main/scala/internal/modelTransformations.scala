@@ -43,7 +43,7 @@ object modelTransformations {
     case ApiObjectSchema(propdefs) =>
       val requiredProps = propdefs.collect {
         case p: ApiPropertyDefinition if p.required => p.name
-      }
+      }.distinct  // distinct is mostly needed for generator tests
       val propMap: Map[String, SpecSchema] = propdefs.map {
         case ApiPropertyDefinition(name, propSchema, _, description) =>
           // pass through the description for the referenced object
