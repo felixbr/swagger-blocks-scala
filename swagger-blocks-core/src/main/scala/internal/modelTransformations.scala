@@ -52,7 +52,7 @@ object modelTransformations {
 
       SpecSchema(
         `type` = Some("object"),
-        required = Some(requiredProps),
+        required = if (requiredProps.nonEmpty) Some(requiredProps) else None,
         properties = Some(propMap)
       )
 
