@@ -148,6 +148,53 @@ class SwaggerController @Inject()() extends Controller {
 Now you only have to include the new action in your `routes` file and point 
 a swagger-ui (possibly rendered by a standard html-view) at the url.
 
+## Usage guide
+
+### Providing a schema example
+
+Since the example has to be embedded in the final json/yaml rendering this feature depends 
+on the rendering library you want to use. The extension method is located at 
+`swaggerblocks.extensions.<renderinglib>.ExampleExtension`. When is is imported, you can 
+call `.withExample` on the schema definition like shown below:
+
+```scala
+import swaggerblocks._
+import swaggerblocks.Implicits._
+import swaggerblocks.extensions.playJson.ExampleExtension
+
+import play.api.libs.json._
+
+lazy val schemaWithExample = swaggerSchema("SchemaWithExample")(
+  property("id")(
+    schema = t.integer
+  ),
+  property("name")(
+    schema = t.string
+  )
+).withExample(
+  Json.obj(
+    "id"   -> 123,
+    "name" -> "Bello"
+  )
+)
+
+// you can of course use all features provided by the json/yaml lib like
+// case class serialization. 
+
+case class Dog(id: Int, name: String)
+implicit val dogFormat = Json.format[Dog]
+
+lazy val schemaWithCaseClassExample = swaggerSchema("SchemaWithCaseClassExample")(
+  property("id")(
+    schema = t.integer
+  ),
+  property("name")(
+    schema = t.string
+  )
+).withExample(
+  Dog(123, "Fiffi")
+)
+```
 
 ## Caveats
 

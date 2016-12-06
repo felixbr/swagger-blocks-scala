@@ -90,6 +90,7 @@ object generators {
   def genSchemaObject(depth: Int = 0): Gen[ApiSchema] =
     for {
       properties <- Gen.nonEmptyListOf(genPropertyDef(depth))
+      example    <- Gen.const("""{"id": 123, "name": "Fiffi"}""")
     } yield ApiObjectSchema(properties)
 
   def genSchemaValue(depth: Int = 0): Gen[ApiSchema] =
@@ -141,7 +142,7 @@ object generators {
 
   lazy val genApiExternalDocs = for {
     description <- genDescription
-    url <- genUrl
+    url         <- genUrl
   } yield ApiExternalDocs(url, description)
 
   lazy val genApiInfo: Gen[ApiInfo] = for {
@@ -154,14 +155,14 @@ object generators {
   } yield ApiInfo(version, title, description, termsOfService, Some(contact), license)
 
   lazy val genApiContact = for {
-    name <- arbitrary[Option[String]]
-    url <- genUrl
+    name  <- arbitrary[Option[String]]
+    url   <- genUrl
     email <- genEmail
   } yield ApiContact(name, Some(url), Some(email))
 
   lazy val genApiLicense = for {
     name <- Gen.identifier
-    url <- genUrl
+    url  <- genUrl
   } yield ApiLicense(name, Some(url))
 
   // PATHS

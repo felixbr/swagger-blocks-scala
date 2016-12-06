@@ -11,11 +11,14 @@ object specModels {
     format: Option[String] = None,
     title: Option[String] = None,
     description: Option[String] = None,
+    example: Option[SpecExample] = None,
     required: Option[List[String]] = None,
     enum: Option[List[String]] = None,
     items: Option[SpecSchema] = None,
     properties: Option[Map[SpecSchemaName, SpecSchema]] = None
   )
+
+  case class SpecExample(value: String) extends AnyVal // {"id": 123, "name": "bello"}
 
   case class SpecParameter(
     name: String,

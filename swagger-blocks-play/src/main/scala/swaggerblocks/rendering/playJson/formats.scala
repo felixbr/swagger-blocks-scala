@@ -39,6 +39,7 @@ object formats {
       (__ \ "format").writeNullable[String] and
       (__ \ "title").writeNullable[String] and
       (__ \ "description").writeNullable[String] and
+      (__ \ "example").writeNullable[SpecExample](exampleWrites) and
       (__ \ "required").writeNullable[List[String]] and
       (__ \ "enum").writeNullable[List[String]] and
       (__ \ "items").lazyWriteNullable[SpecSchema](specSchemaWrites) and
@@ -55,5 +56,10 @@ object formats {
     Writes.map(Writes.map[SpecOperation])
 
   implicit val specWrites = Json.writes[Spec]
+
+  lazy val exampleWrites = new Writes[SpecExample] {
+    def writes(exampleJson: SpecExample): JsValue =
+      Json.parse(exampleJson.value)
+  }
 
 }

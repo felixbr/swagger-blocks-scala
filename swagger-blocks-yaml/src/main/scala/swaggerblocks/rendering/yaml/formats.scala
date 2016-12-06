@@ -1,12 +1,11 @@
 package swaggerblocks.rendering.yaml
 
 import internal.models._
-import net.jcazevedo.moultingyaml._
-import net.jcazevedo.moultingyaml.DefaultYamlProtocol._
-import swaggerblocks._
 import internal.propertyTypes.PropertyType
 import internal.specModels._
 import internal.writeLogic
+import net.jcazevedo.moultingyaml._
+import swaggerblocks._
 
 //noinspection NotImplementedCode
 object formats extends DefaultYamlProtocol {
@@ -33,7 +32,13 @@ object formats extends DefaultYamlProtocol {
     def read(yaml: YamlValue): PropertyType = ???
   }
 
-  implicit val specSchema: YamlFormat[SpecSchema] = lazyFormat(yamlFormat9(SpecSchema))
+  implicit val specExample: YamlFormat[SpecExample] = new YamlFormat[SpecExample] {
+    def write(obj: SpecExample): YamlValue = obj.value.parseYaml
+
+    def read(yaml: YamlValue): SpecExample = ???
+  }
+
+  implicit val specSchema: YamlFormat[SpecSchema] = lazyFormat(yamlFormat10(SpecSchema))
 
   implicit val specResponse = yamlFormat2(SpecResponse)
 

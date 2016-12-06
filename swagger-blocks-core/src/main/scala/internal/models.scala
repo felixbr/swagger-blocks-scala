@@ -110,7 +110,8 @@ object models {
 
   sealed trait ApiSchema
   case class ApiObjectSchema(
-    properties: List[ApiPropertyDefinition]
+    properties: List[ApiPropertyDefinition],
+    example: Option[String] = None  // filled by ExampleExtension
   ) extends ApiSchema
   case class ApiValueSchema(
     typ: PropertyType,

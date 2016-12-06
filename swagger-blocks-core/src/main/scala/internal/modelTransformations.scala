@@ -40,10 +40,10 @@ object modelTransformations {
   }
 
   def transformSchema(apiSchema: ApiSchema): SpecSchema = apiSchema match {
-    case ApiObjectSchema(propdefs) =>
+    case ApiObjectSchema(propdefs, example) =>
       val requiredProps = propdefs.collect {
         case p: ApiPropertyDefinition if p.required => p.name
-      }.distinct  // distinct is mostly needed for generator tests
+      }.distinct // distinct is mostly needed for generator tests
       val propMap: Map[String, SpecSchema] = propdefs.map {
         case ApiPropertyDefinition(name, propSchema, _, description) =>
           // pass through the description for the referenced object
@@ -53,7 +53,8 @@ object modelTransformations {
       SpecSchema(
         `type` = Some("object"),
         required = if (requiredProps.nonEmpty) Some(requiredProps) else None,
-        properties = Some(propMap)
+        properties = Some(propMap),
+        example = example.map(SpecExample)
       )
 
     case ApiValueSchema(propType, description, enum) =>

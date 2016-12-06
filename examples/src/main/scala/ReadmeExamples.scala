@@ -106,4 +106,45 @@ object ReadmeExamples {
     // format: on
   }
 
+  object exampleExtensions {
+    // format off
+
+    import swaggerblocks._
+    import swaggerblocks.Implicits._
+    import swaggerblocks.extensions.playJson.ExampleExtension
+
+    import play.api.libs.json._
+
+    lazy val schemaWithExample = swaggerSchema("SchemaWithExample")(
+      property("id")(
+        schema = t.integer
+      ),
+      property("name")(
+        schema = t.string
+      )
+    ).withExample(
+      Json.obj(
+        "id"   -> 123,
+        "name" -> "Bello"
+      )
+    )
+
+    // you can of course use all features provided by the json/yaml lib like
+    // case class serialization
+
+    case class Dog(id: Int, name: String)
+    implicit val dogFormat = Json.format[Dog]
+
+    lazy val schemaWithCaseClassExample = swaggerSchema("SchemaWithCaseClassExample")(
+      property("id")(
+        schema = t.integer
+      ),
+      property("name")(
+        schema = t.string
+      )
+    ).withExample(
+      Dog(123, "Fiffi")
+    )
+  }
+
 }
