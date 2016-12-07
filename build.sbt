@@ -1,12 +1,14 @@
 val commonSettings = Seq(
-  version := "0.3.0",
+  Quiet.silenceScalaBinaryVersionWarning,
   scalaVersion := Version.scala,
+  crossScalaVersions := Version.crossVersions,
+  version := "0.3.1",
   homepage := Some(url("https://github.com/felixbr/swagger-blocks-scala")),
   organization := "io.github.felixbr",
   licenses := List(
     "MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")
   ),
-  scalafmtConfig in ThisBuild := Some(file(".scalafmt.conf"))
+  scalafmtConfig := Some(file(".scalafmt.conf"))
 )
 
 val commonDeps = Seq(

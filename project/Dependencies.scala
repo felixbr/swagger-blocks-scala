@@ -1,16 +1,17 @@
 import sbt._
 
 object Version {
+  final val crossVersions       = List("2.11.8", "2.12.1")
+  final val scala               = "2.12.1"
   final val akka                = "2.4.8"
-  final val play                = "2.5.9"
-  final val scala               = "2.11.8"
+  final val play                = "2.6.0-M1"
   final val scalaTest           = "3.0.0"
   final val uPickle             = "0.4.1"
   final val jsonSchemaValidator = "2.2.6"
   final val ammoniteOps         = "0.7.7"
-  final val moultingYaml        = "0.3.0"
+  final val moultingYaml        = "0.4.0"
   final val scalacheck          = "1.13.4"
-  final val scalacheckShapeless = "1.1.1"
+  final val scalacheckShapeless = "1.1.3"
   final val circe               = "0.7.0"
 }
 
