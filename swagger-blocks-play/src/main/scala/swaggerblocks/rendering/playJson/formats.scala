@@ -46,6 +46,8 @@ object formats {
       (__ \ "properties").lazyWriteNullable[Map[SpecSchemaName, SpecSchema]](specSchemaMapWrites)
   )(unlift(SpecSchema.unapply))
 
+  implicit val specResponseHeaderWrites = Json.writes[SpecResponseHeader]
+
   implicit val specResponseWrites = Json.writes[SpecResponse]
 
   implicit val specParameterWrites = Json.writes[SpecParameter]

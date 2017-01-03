@@ -88,11 +88,51 @@ object modelTransformations {
 
   def transformParameterSchema(base: SpecParameter, schema: ApiParameterSchema): SpecParameter = {
     schema match {
+      // TODO fix this mess
       case ApiParameterArraySchema(itemsSchema) =>
-        val arrayBase = base.copy(
-          `type` = Some("array")
+        val innerSchema = itemsSchema.asInstanceOf[ApiParameterValueSchema]
+
+        base.copy(
+          `type` = Some("array"),
+          items = Some(
+            SpecSchema(
+              `type` = Some(propertyTypeToString(innerSchema.typ))
+            )
+          )
         )
-        transformParameterSchema(base, itemsSchema)
+
+      case ApiParameterValueSchema(typ) =>
+        base.copy(
+          `type` = Some(propertyTypeToString(typ))
+        )
+    }
+  }
+
+  def transformResponseHeader(apiResponseHeader: ApiResponseHeader): SpecResponseHeader = {
+    val base = SpecResponseHeader(
+      description = apiResponseHeader.description,
+      enum = if (apiResponseHeader.enum.isEmpty) None else Some(apiResponseHeader.enum)
+    )
+    transformResponseHeaderSchema(base, apiResponseHeader.schema)
+  }
+
+  def transformResponseHeaderSchema(
+    base: SpecResponseHeader,
+    schema: ApiParameterSchema): SpecResponseHeader = {
+
+    schema match {
+      // TODO fix this mess
+      case ApiParameterArraySchema(itemsSchema) =>
+        val innerSchema = itemsSchema.asInstanceOf[ApiParameterValueSchema]
+
+        base.copy(
+          `type` = Some("array"),
+          items = Some(
+            SpecSchema(
+              `type` = Some(propertyTypeToString(innerSchema.typ))
+            )
+          )
+        )
 
       case ApiParameterValueSchema(typ) =>
         base.copy(
@@ -104,7 +144,8 @@ object modelTransformations {
   def transfromResponse(apiResponse: ApiResponse): SpecResponse = {
     SpecResponse(
       description = apiResponse.description,
-      schema = apiResponse.schema.map(transformSchemaRef(_))
+      schema = apiResponse.schema.map(transformSchemaRef(_)),
+      headers = apiResponse.headers.map(h => h.name -> transformResponseHeader(h)).toMap
     )
   }
 

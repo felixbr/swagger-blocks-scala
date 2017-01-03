@@ -86,7 +86,16 @@ object ApiExample extends App {
 
         responses = List(
           response(200)(
-            schema = feedingPetList
+            description = "Pet list response",
+            schema = feedingPetList,
+
+            headers = List(
+              responseHeader(
+                name = "ETag",
+                schema = t.string,
+                description = "A hash of the response for cache invalidation purposes"
+              )
+            )
           )
         )
       )

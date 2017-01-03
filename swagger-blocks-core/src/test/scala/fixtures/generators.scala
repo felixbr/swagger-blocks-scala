@@ -200,7 +200,15 @@ object generators {
 
   lazy val genApiResponse = for {
     description <- Gen.alphaNumStr
-  } yield ApiResponse(description, schema = None) // TODO schemaRef
+    responseHeaders <- Gen.listOfN(1, genApiResponseHeader)
+  } yield ApiResponse(description, schema = None, headers = responseHeaders) // TODO schemaRef
+
+  lazy val genApiResponseHeader = for {
+    name <- Gen.identifier
+    description <- genDescription
+    schema <- genApiParameterSchema()
+    enum <- genEnum
+  } yield ApiResponseHeader(name, schema, description, enum)
 
   lazy val genApiParameters: Gen[List[ApiParameter]] =
     for {

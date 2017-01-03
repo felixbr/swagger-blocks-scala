@@ -34,9 +34,22 @@ object specModels {
     enum: Option[List[String]] = None
   )
 
+  type SpecResponseHeaderName = String
   case class SpecResponse(
     description: String,
-    schema: Option[SpecSchema] = None
+    schema: Option[SpecSchema] = None,
+    headers: Map[SpecResponseHeaderName, SpecResponseHeader] = Map.empty
+  )
+
+  case class SpecResponseHeader(
+    description: Option[String] = None,
+    schema: Option[SpecSchema] = None,
+    `type`: Option[String] = None,
+    format: Option[String] = None,
+    allowEmptyValue: Option[Boolean] = None,
+    items: Option[SpecSchema] = None,
+    collectionFormat: Option[String] = None,
+    enum: Option[List[String]] = None
   )
 
   type SpecResponseStatus = String

@@ -92,18 +92,22 @@ object models {
     typ: PropertyType
   ) extends ApiParameterSchema
 
-//  sealed trait ApiParameterSchemaRef
-//  case class SingleParameterSchemaRef(parameterSchema: ApiParameterSchema)   extends ApiParameterSchemaRef
-//  case class MultipleParamSchemaRef(parameterSchema: ApiParameterSchema) extends ApiParameterSchemaRef
-
   case class ApiResponse(
     description: String,
-    schema: Option[ApiSchemaRef]
+    schema: Option[ApiSchemaRef],
+    headers: List[ApiResponseHeader]
   )
 
   case class ApiResponseDefinition(
     status: String,
     response: ApiResponse
+  )
+
+  case class ApiResponseHeader(
+    name: String,
+    schema: ApiParameterSchema,
+    description: Option[String],
+    enum: List[String]
   )
 
   case class ApiSchemaDefinition(name: String, schema: ApiSchema)

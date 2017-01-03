@@ -40,7 +40,9 @@ object formats extends DefaultYamlProtocol {
 
   implicit val specSchema: YamlFormat[SpecSchema] = lazyFormat(yamlFormat10(SpecSchema))
 
-  implicit val specResponse = yamlFormat2(SpecResponse)
+  implicit val specResponseHeader = yamlFormat8(SpecResponseHeader)
+
+  implicit val specResponse = yamlFormat3(SpecResponse)
 
   implicit val specParameter = yamlFormat11(SpecParameter)
 

@@ -266,12 +266,22 @@ package object swaggerblocks {
 
   def response(statusCode: Int)(
     description: String,
-    schema: Option[ApiSchemaRef] = None
+    schema: Option[ApiSchemaRef] = None,
+    headers: List[ApiResponseHeader] = List.empty
   ): ApiResponseDefinition = {
     ApiResponseDefinition(
       statusCode.toString,
-      ApiResponse(description, schema)
+      ApiResponse(description, schema, headers)
     )
+  }
+
+  def responseHeader(
+    name: String,
+    schema: ApiParameterSchema,
+    description: Option[String] = None,
+    enum: List[String] = List.empty
+  ): ApiResponseHeader = {
+    ApiResponseHeader(name, schema, description, enum)
   }
 
   def swaggerSchema(name: String)(
