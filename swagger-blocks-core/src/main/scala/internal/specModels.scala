@@ -38,7 +38,7 @@ object specModels {
   case class SpecResponse(
     description: String,
     schema: Option[SpecSchema] = None,
-    headers: Map[SpecResponseHeaderName, SpecResponseHeader] = Map.empty
+    headers: Option[Map[SpecResponseHeaderName, SpecResponseHeader]] = None
   )
 
   case class SpecResponseHeader(

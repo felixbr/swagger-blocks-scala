@@ -142,10 +142,12 @@ object modelTransformations {
   }
 
   def transfromResponse(apiResponse: ApiResponse): SpecResponse = {
+    val headers = apiResponse.headers.map(h => h.name -> transformResponseHeader(h)).toMap
+
     SpecResponse(
       description = apiResponse.description,
       schema = apiResponse.schema.map(transformSchemaRef(_)),
-      headers = apiResponse.headers.map(h => h.name -> transformResponseHeader(h)).toMap
+      headers = if (headers.isEmpty) None else Some(headers)
     )
   }
 
