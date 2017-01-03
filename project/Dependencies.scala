@@ -15,10 +15,11 @@ object Version {
 
 object Lib {
   val akkaHttp            = "com.typesafe.akka"          %% "akka-http-experimental"    % Version.akka
+  val play                = "com.typesafe.play"          %% "play"                      % Version.play
   val playJson            = "com.typesafe.play"          %% "play-json"                 % Version.play
   val scalaTest           = "org.scalatest"              %% "scalatest"                 % Version.scalaTest
   val upickle             = "com.lihaoyi"                %% "upickle"                   % Version.uPickle
-  val jsonSchemaValidator = "com.github.fge"              % "json-schema-validator"     % Version.jsonSchemaValidator
+  val jsonSchemaValidator = "com.github.fge"             % "json-schema-validator"      % Version.jsonSchemaValidator
   val ammoniteOps         = "com.lihaoyi"                %% "ammonite-ops"              % Version.ammoniteOps
   val moultingYaml        = "net.jcazevedo"              %% "moultingyaml"              % Version.moultingYaml
   val scalacheck          = "org.scalacheck"             %% "scalacheck"                % Version.scalacheck

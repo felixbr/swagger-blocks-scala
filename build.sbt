@@ -64,14 +64,16 @@ lazy val yaml = project
 
 lazy val examples = project
   .in(file("examples"))
-  .enablePlugins(PlayScala)
   .dependsOn(play, yaml, core)
   .settings(commonSettings: _*)
   .settings(
     name := "swagger-blocks-examples",
     publishArtifact := false,
     publish := {},
-    publishLocal := {}
+    publishLocal := {},
+    libraryDependencies ++= List(
+      Lib.play
+    )
   )
 
 cancelable in Global := true
