@@ -18,7 +18,7 @@ val commonDeps = Seq(
 
 lazy val root = project
   .in(file("."))
-  .aggregate(core, play, yaml)
+  .aggregate(core, play, yaml, circe)
   .settings(commonSettings: _*)
   .settings(publishSettings: _*)
   .settings(
@@ -50,6 +50,20 @@ lazy val play = project
     )
   )
 
+lazy val circe = project
+  .in(file("swagger-blocks-circe"))
+  .dependsOn(core % "compile;test->test")
+  .settings(commonSettings: _*)
+  .settings(publishSettings: _*)
+  .settings(
+    name := "swagger-blocks-circe",
+    libraryDependencies ++= commonDeps ++ List(
+      Lib.circeCore,
+      Lib.circeGeneric,
+      Lib.circeParser
+    )
+  )
+
 lazy val yaml = project
   .in(file("swagger-blocks-yaml"))
   .dependsOn(core % "compile;test->test")
@@ -64,7 +78,7 @@ lazy val yaml = project
 
 lazy val examples = project
   .in(file("examples"))
-  .dependsOn(play, yaml, core)
+  .dependsOn(core, play, yaml, circe)
   .settings(commonSettings: _*)
   .settings(
     name := "swagger-blocks-examples",
