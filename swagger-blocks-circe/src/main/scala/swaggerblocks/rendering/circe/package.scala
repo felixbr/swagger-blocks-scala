@@ -1,11 +1,11 @@
 package swaggerblocks.rendering
 
-import internal.models.{ApiPathDefinition, ApiRoot, ApiSchemaDefinition, ApiSpec}
+import swaggerblocks.internal.models.{ApiPathDefinition, ApiRoot, ApiSchemaDefinition, ApiSpec}
 import swaggerblocks.RenderingPackage
 import io.circe._
 import io.circe.generic.auto._
 import io.circe.syntax._
-import internal.modelTransformations.transformSpec
+import swaggerblocks.internal.modelTransformations.transformSpec
 import circe.formats._
 
 package object circe extends RenderingPackage {

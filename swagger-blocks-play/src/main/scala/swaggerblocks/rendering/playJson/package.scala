@@ -1,10 +1,10 @@
 package swaggerblocks.rendering
 
-import internal.models._
+import swaggerblocks.internal.models._
 import play.api.libs.json._
 import swaggerblocks.RenderingPackage
 import swaggerblocks.rendering.playJson.formats._
-import internal.modelTransformations.transformSpec
+import swaggerblocks.internal.modelTransformations.transformSpec
 
 package object playJson extends RenderingPackage {
   def render(

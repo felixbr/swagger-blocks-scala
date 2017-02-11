@@ -1,9 +1,9 @@
 package swaggerblocks.rendering.playJson
 
-import internal.models._
-import internal.propertyTypes.PropertyType
-import internal.specModels._
-import internal.writeLogic
+import swaggerblocks.internal.models._
+import swaggerblocks.internal.propertyTypes.PropertyType
+import swaggerblocks.internal.specModels._
+import swaggerblocks.internal.writeLogic
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import swaggerblocks._

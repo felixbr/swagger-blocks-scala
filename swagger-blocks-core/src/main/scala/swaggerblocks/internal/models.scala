@@ -1,4 +1,4 @@
-package internal
+package swaggerblocks.internal
 
 import swaggerblocks._
 import propertyTypes.PropertyType

@@ -1,9 +1,9 @@
 package fixtures
 
-import internal.models._
-import internal.propertyTypes
-import internal.propertyFormats
-import internal.propertyTypes.PropertyType
+import swaggerblocks.internal.models._
+import swaggerblocks.internal.propertyTypes
+import swaggerblocks.internal.propertyFormats
+import swaggerblocks.internal.propertyTypes.PropertyType
 import org.scalacheck._
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Shapeless._

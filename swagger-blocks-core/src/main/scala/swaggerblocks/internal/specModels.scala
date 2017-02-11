@@ -1,6 +1,6 @@
-package internal
+package swaggerblocks.internal
 
-import internal.models._
+import swaggerblocks.internal.models._
 
 object specModels {
 

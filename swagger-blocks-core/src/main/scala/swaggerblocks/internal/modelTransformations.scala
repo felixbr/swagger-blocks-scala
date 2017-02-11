@@ -1,7 +1,7 @@
-package internal
+package swaggerblocks.internal
 
-import internal.models._
-import internal.specModels._
+import swaggerblocks.internal.models._
+import swaggerblocks.internal.specModels._
 import swaggerblocks.Method
 import writeLogic._
 

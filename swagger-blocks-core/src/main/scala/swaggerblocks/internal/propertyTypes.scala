@@ -1,6 +1,6 @@
-package internal
+package swaggerblocks.internal
 
-import internal.propertyFormats.{IntegerFormat, NumberFormat, StringFormat}
+import swaggerblocks.internal.propertyFormats.{IntegerFormat, NumberFormat, StringFormat}
 
 object propertyTypes {
 

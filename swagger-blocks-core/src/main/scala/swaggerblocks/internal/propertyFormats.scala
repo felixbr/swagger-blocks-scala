@@ -1,4 +1,4 @@
-package internal
+package swaggerblocks.internal
 
 object propertyFormats {
 

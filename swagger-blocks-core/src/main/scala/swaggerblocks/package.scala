@@ -1,7 +1,7 @@
-import internal.models._
-import internal.{propertyFormats => f}
-import internal.propertyTypes.PropertyType
-import internal.{propertyTypes => s}
+import swaggerblocks.internal.models._
+import swaggerblocks.internal.{propertyFormats => f}
+import swaggerblocks.internal.propertyTypes.PropertyType
+import swaggerblocks.internal.{propertyTypes => s}
 
 import scala.language.implicitConversions
 

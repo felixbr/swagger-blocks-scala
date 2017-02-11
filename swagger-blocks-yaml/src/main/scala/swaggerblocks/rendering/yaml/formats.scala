@@ -1,9 +1,9 @@
 package swaggerblocks.rendering.yaml
 
-import internal.models._
-import internal.propertyTypes.PropertyType
-import internal.specModels._
-import internal.writeLogic
+import swaggerblocks.internal.models._
+import swaggerblocks.internal.propertyTypes.PropertyType
+import swaggerblocks.internal.specModels._
+import swaggerblocks.internal.writeLogic
 import net.jcazevedo.moultingyaml._
 import swaggerblocks._
 

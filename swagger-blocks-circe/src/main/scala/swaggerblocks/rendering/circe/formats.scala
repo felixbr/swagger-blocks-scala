@@ -1,6 +1,6 @@
 package swaggerblocks.rendering.circe
 
-import internal.specModels.SpecExample
+import swaggerblocks.internal.specModels.SpecExample
 import io.circe._
 import io.circe.parser.parse
 

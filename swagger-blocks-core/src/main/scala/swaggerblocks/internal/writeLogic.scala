@@ -1,6 +1,6 @@
-package internal
+package swaggerblocks.internal
 
-import internal.{propertyTypes => s}
+import swaggerblocks.internal.{propertyTypes => s}
 import swaggerblocks._
 
 object writeLogic {

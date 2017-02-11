@@ -1,6 +1,6 @@
 package swaggerblocks.extensions
 
-import internal.models.{ApiObjectSchema, ApiSchemaDefinition}
+import swaggerblocks.internal.models.{ApiObjectSchema, ApiSchemaDefinition}
 import net.jcazevedo.moultingyaml._
 
 object yaml {

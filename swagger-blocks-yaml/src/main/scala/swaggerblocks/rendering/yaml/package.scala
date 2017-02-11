@@ -1,6 +1,6 @@
 package swaggerblocks.rendering
 
-import internal.models._
+import swaggerblocks.internal.models._
 import net.jcazevedo.moultingyaml._
 import swaggerblocks._
 import swaggerblocks.rendering.yaml.formats._

@@ -1,6 +1,6 @@
 package swaggerblocks.extensions
 
-import internal.models.{ApiObjectSchema, ApiSchemaDefinition}
+import swaggerblocks.internal.models.{ApiObjectSchema, ApiSchemaDefinition}
 import play.api.libs.json.{JsValue, Json, Writes}
 
 object playJson {

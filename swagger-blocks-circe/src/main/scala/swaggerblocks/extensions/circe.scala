@@ -1,6 +1,6 @@
 package swaggerblocks.extensions
 
-import internal.models.{ApiObjectSchema, ApiSchemaDefinition}
+import swaggerblocks.internal.models.{ApiObjectSchema, ApiSchemaDefinition}
 import io.circe._
 import io.circe.syntax._
 
