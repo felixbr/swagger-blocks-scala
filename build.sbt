@@ -1,6 +1,6 @@
 val commonSettings = Seq(
   Quiet.silenceScalaBinaryVersionWarning,
-  scalaVersion := Version.scala,
+  scalaVersion := Version.scala_2_11,
   crossScalaVersions := Version.crossVersions,
   version := "0.3.1",
   homepage := Some(url("https://github.com/felixbr/swagger-blocks-scala")),
@@ -47,9 +47,12 @@ lazy val play = project
   .settings(publishSettings: _*)
   .settings(
     name := "swagger-blocks-play",
-    libraryDependencies ++= commonDeps ++ List(
-      Lib.playJson
-    )
+    libraryDependencies <++= scalaVersion { (sv) =>
+      commonDeps ++ List(
+        if (sv == Version.scala_2_11) Lib.playJson_2_11 else Lib.playJson
+      )
+    },
+    crossScalaVersions := List(Version.scala_2_11)
   )
 
 lazy val circe = project
@@ -89,7 +92,8 @@ lazy val examples = project
     publishLocal := {},
     libraryDependencies ++= List(
       Lib.play
-    )
+    ),
+    crossScalaVersions := List(Version.scala_2_11)
   )
 
 cancelable in Global := true
