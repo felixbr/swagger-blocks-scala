@@ -6,7 +6,7 @@ cache:
     - $HOME/.ivy2/cache
 
     # The line below can be used to cache a given sbt version.
-    - $HOME/.sbt/launchers/0.13.8
+    - $HOME/.sbt/launchers/0.13.11
 
     # At the moment, Scala 2.11.2 and 2.10.4 are preinstalled in Travis VM
     # image.
