@@ -19,7 +19,7 @@ Currently this only supports a part of the full swagger-spec.
 
 ### Dependencies
 
-The library is published on Sonatype for both `Scala 2.11` and `Scala 2.12`:
+The library is published on Sonatype for both `Scala 2.11.8` and `Scala 2.12.1`:
 ```scala
 resolvers += Resolver.sonatypeRepo("releases")
 ```
@@ -39,7 +39,7 @@ you only need to specify the extension you want to use:
 ```scala
 "io.github.felixbr" %% "swagger-blocks-yaml" % "0.4.0
 ```
-####
+#### circe (0.7.0)
 ```scala
 "io.github.felixbr" %% "swagger-blocks-circe" % "0.4.0"
 ```
