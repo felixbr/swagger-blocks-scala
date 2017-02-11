@@ -11,7 +11,7 @@ object Version {
   final val moultingYaml        = "0.3.0"
   final val scalacheck          = "1.13.4"
   final val scalacheckShapeless = "1.1.1"
-  final val circe               = "0.6.1"
+  final val circe               = "0.7.0"
 }
 
 object Lib {
@@ -27,5 +27,5 @@ object Lib {
   val scalacheckShapeless = "com.github.alexarchambault" %% "scalacheck-shapeless_1.13" % Version.scalacheckShapeless
   val circeCore           = "io.circe"                   %% "circe-core"                % Version.circe
   val circeGeneric        = "io.circe"                   %% "circe-generic"             % Version.circe
-  val circeParser        = "io.circe"                   %% "circe-parser"             % Version.circe
+  val circeParser         = "io.circe"                   %% "circe-parser"              % Version.circe
 }
