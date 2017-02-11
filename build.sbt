@@ -2,7 +2,7 @@ val commonSettings = Seq(
   Quiet.silenceScalaBinaryVersionWarning,
   scalaVersion := Version.scala_2_11,
   crossScalaVersions := Version.crossVersions,
-  version := "0.3.1",
+  version := "0.4.0",
   homepage := Some(url("https://github.com/felixbr/swagger-blocks-scala")),
   organization := "io.github.felixbr",
   licenses := List(
