@@ -5,7 +5,7 @@ A library to express swagger specifications using a Scala DSL.
 It is inspired mainly by [fotinakis/swagger-blocks](https://github.com/fotinakis/swagger-blocks) 
 for ruby.
 
-Currently this only supports a part of the full swagger-spec and only **Scala 2.11**
+Currently this only supports a part of the full swagger-spec.
 
 ## Goals
 
@@ -19,25 +19,25 @@ Currently this only supports a part of the full swagger-spec and only **Scala 2.
 
 ### Dependencies
 
-The library is published on Sonatype:
+The library is published on Sonatype for both `Scala 2.11` and `Scala 2.12`:
 
     resolvers += Resolver.sonatypeRepo("releases")
 
 There is a core modul available for the DSL and core data types:
 
-    "io.github.felixbr" %% "swagger-blocks-scala" % "0.3.0"
+    "io.github.felixbr" %% "swagger-blocks-scala" % "0.3.1"
 
 The plan is to provide bindings for the most popular json libs, but right now 
 only play-json and moultingyaml are supported. The extensions also include the core lib, so 
 you only need to specify the extension you want to use:
 
-#### play-json (2.5.9)
+#### play-json (2.5.9 for 2.11 and 2.6.0-M1 for 2.12)
 
-    "io.github.felixbr" %% "swagger-blocks-play" % "0.3.0"
+    "io.github.felixbr" %% "swagger-blocks-play" % "0.3.1"
     
-#### moultingyaml (0.3.1)
+#### moultingyaml (0.4.0)
 
-    "io.github.felixbr" %% "swagger-blocks-yaml" % "0.3.0
+    "io.github.felixbr" %% "swagger-blocks-yaml" % "0.3.1
     
 ### Writing Swagger Path and Schema specifications
     
