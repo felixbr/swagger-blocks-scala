@@ -31,7 +31,7 @@ The plan is to provide bindings for the most popular json libs, but right now
 only play-json and moultingyaml are supported. The extensions also include the core lib, so 
 you only need to specify the extension you want to use:
 
-#### play-json (2.6.0-M1)
+#### play-json (2.5.9 for 2.11 and 2.6.0-M1 for 2.12)
 
     "io.github.felixbr" %% "swagger-blocks-play" % "0.3.1"
     
