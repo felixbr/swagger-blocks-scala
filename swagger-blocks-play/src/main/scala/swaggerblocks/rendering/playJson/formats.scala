@@ -50,6 +50,8 @@ object formats {
 
   implicit val specResponseWrites = Json.writes[SpecResponse]
 
+  implicit val specValue = Json.writes[SpecValue]
+
   implicit val specParameterWrites = Json.writes[SpecParameter]
 
   implicit val specOperationWrites = Json.writes[SpecOperation]

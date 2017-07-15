@@ -15,7 +15,7 @@ object propertyFormats {
   case object Password extends StringFormat
 
   sealed trait NumberFormat
-  case object Float extends NumberFormat
+  case object Float  extends NumberFormat
   case object Double extends NumberFormat
 
 }

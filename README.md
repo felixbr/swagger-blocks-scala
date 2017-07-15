@@ -7,11 +7,18 @@ for ruby.
 
 Currently this only supports a part of the full swagger-spec.
 
+## Note about current maintenance status
+
+I currently have no personal use for the library anymore, so don't expect frequent updates.
+
+For 0.5.x onward the scope of the project was reduced, so this will hopefully help me
+keep up with updating dependencies and the like.
+
 ## Goals
 
 * Express swagger specifications in a reasonably type-safe DSL.
 * Don't clutter models and logic with annotations
-* Provide bindings for common json-libs (and yaml)
+* Provide serialization for json and yaml using circe
 * Avoid reflection
 * Be reasonable to use in IDEs (e.g. IntelliJ)
 
@@ -27,14 +34,9 @@ There is a core modul available for the DSL and core data types:
 ```scala
 "io.github.felixbr" %% "swagger-blocks-scala" % "0.4.0"
 ```
-The plan is to provide bindings for the most popular json libs, but right now 
-only play-json and moultingyaml are supported. The extensions also include the core lib, so 
+There are serializers for json and yaml. The extensions also include the core lib, so
 you only need to specify the extension you want to use:
 
-#### play-json (2.5.9 for 2.11 and 2.6.0-M1 for 2.12)
-```scala
-"io.github.felixbr" %% "swagger-blocks-play" % "0.4.0"
-```
 #### moultingyaml (0.4.0)
 ```scala
 "io.github.felixbr" %% "swagger-blocks-yaml" % "0.4.0
@@ -96,6 +98,7 @@ object PetsController {
       required = false
     )
   )
+
 ```
 
 ### Rendering the output for swagger-ui
@@ -105,15 +108,12 @@ recommend to use the same controller which serves the ui. You also have to
 write the required root metadata for swagger:
 
 ```Scala
-import javax.inject._
-import play.api.mvc._
-
 import swaggerblocks._
 import swaggerblocks.Implicits._
-import swaggerblocks.rendering.playJson.renderPretty
+import swaggerblocks.rendering.circe.renderPretty
 
-@Singleton
-class SwaggerController @Inject()() extends Controller {
+// could be play or some other framework
+class SwaggerController {
 
   lazy val petstoreRoot = swaggerRoot("2.0")(
     host = "petstore.swagger.wordnik.com",
@@ -141,10 +141,10 @@ class SwaggerController @Inject()() extends Controller {
     PetsController.petSchema
   )
 
-  def json = Action {
-    val swaggerJson = renderPretty(petstoreRoot, paths, schemas)
+  def json = {
+    val swaggerJson: String = renderPretty(petstoreRoot, paths, schemas)
 
-    Ok(swaggerJson)
+    // response with swaggerJson as content
   }
 }
 ```
@@ -164,9 +164,10 @@ call `.withExample` on the schema definition like shown below:
 ```scala
 import swaggerblocks._
 import swaggerblocks.Implicits._
-import swaggerblocks.extensions.playJson.ExampleExtension
+import swaggerblocks.extensions.circe.ExampleExtension
 
-import play.api.libs.json._
+import io.circe.syntax._
+import io.circe.generic.auto._
 
 lazy val schemaWithExample = swaggerSchema("SchemaWithExample")(
   property("id")(
@@ -176,17 +177,16 @@ lazy val schemaWithExample = swaggerSchema("SchemaWithExample")(
     schema = t.string
   )
 ).withExample(
-  Json.obj(
-    "id"   -> 123,
-    "name" -> "Bello"
+  Map(
+    "id"   -> 123.asJson,     // if the values in a map are not uniform, you have to be
+    "name" -> "Bello".asJson  // explicit about it being serializable (or use a case class)
   )
 )
 
-// you can of course use all features provided by the json/yaml lib like
-// case class serialization. 
+// you can of course use all features provided by circe like
+// case class serialization
 
 case class Dog(id: Int, name: String)
-implicit val dogFormat = Json.format[Dog]
 
 lazy val schemaWithCaseClassExample = swaggerSchema("SchemaWithCaseClassExample")(
   property("id")(

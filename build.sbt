@@ -1,4 +1,4 @@
-val commonSettings = Seq(
+val commonSettings = List(
   Quiet.silenceScalaBinaryVersionWarning,
   scalaVersion := Version.scala_2_11,
   crossScalaVersions := Version.crossVersions,
@@ -7,11 +7,10 @@ val commonSettings = Seq(
   organization := "io.github.felixbr",
   licenses := List(
     "MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")
-  ),
-  scalafmtConfig := Some(file(".scalafmt.conf"))
+  )
 )
 
-val commonDeps = Seq(
+val commonDeps = List(
   Lib.scalaTest           % "test",
   Lib.jsonSchemaValidator % "test",
   Lib.scalacheck          % "test",
@@ -20,7 +19,7 @@ val commonDeps = Seq(
 
 lazy val root = project
   .in(file("."))
-  .aggregate(core, play, yaml, circe)
+  .aggregate(core, circe, yaml)
   .settings(commonSettings: _*)
   .settings(publishSettings: _*)
   .settings(
@@ -36,23 +35,8 @@ lazy val core = project
   .settings(commonSettings: _*)
   .settings(publishSettings: _*)
   .settings(
-    name := "swagger-blocks-scala",
+    name := "swagger-blocks-core",
     libraryDependencies ++= commonDeps
-  )
-
-lazy val play = project
-  .in(file("swagger-blocks-play"))
-  .dependsOn(core % "compile;test->test")
-  .settings(commonSettings: _*)
-  .settings(publishSettings: _*)
-  .settings(
-    name := "swagger-blocks-play",
-    libraryDependencies <++= scalaVersion { (sv) =>
-      commonDeps ++ List(
-        if (sv == Version.scala_2_11) Lib.playJson_2_11 else Lib.playJson
-      )
-    },
-    crossScalaVersions := List(Version.scala_2_11)
   )
 
 lazy val circe = project
@@ -61,7 +45,7 @@ lazy val circe = project
   .settings(commonSettings: _*)
   .settings(publishSettings: _*)
   .settings(
-    name := "swagger-blocks-circe",
+    name := "swagger-blocks-scala",
     libraryDependencies ++= commonDeps ++ List(
       Lib.circeCore,
       Lib.circeGeneric,
@@ -77,26 +61,29 @@ lazy val yaml = project
   .settings(
     name := "swagger-blocks-yaml",
     libraryDependencies ++= commonDeps ++ List(
-      Lib.moultingYaml
+      Lib.circeCore,
+      Lib.circeGeneric,
+      Lib.circeParser,
+      Lib.circeYaml
     )
   )
 
 lazy val examples = project
   .in(file("examples"))
-  .dependsOn(core, play, yaml, circe)
+  .dependsOn(core, yaml, circe)
   .settings(commonSettings: _*)
   .settings(
     name := "swagger-blocks-examples",
     publishArtifact := false,
     publish := {},
     publishLocal := {},
-    libraryDependencies ++= List(
-      Lib.play
-    ),
+    libraryDependencies ++= {
+      List(
+        if (scalaVersion.value == Version.scala_2_11) Lib.playJson_2_11 else Lib.playJson
+      )
+    },
     crossScalaVersions := List(Version.scala_2_11)
   )
-
-cancelable in Global := true
 
 initialCommands in console in core in Test :=
   """
@@ -104,7 +91,7 @@ initialCommands in console in core in Test :=
     |import org.scalacheck._
   """.stripMargin
 
-scalacOptions in Global ++= Seq(
+scalacOptions in Global ++= List(
   "-deprecation",
   "-encoding",
   "UTF-8", // yes, this is 2 args
@@ -118,7 +105,7 @@ scalacOptions in Global ++= Seq(
   "-Xfuture"
 )
 
-lazy val publishSettings = Seq(
+lazy val publishSettings = List(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   publishTo := {

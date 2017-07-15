@@ -5,9 +5,8 @@ import helpers.CustomMatchers
 import org.scalatest._
 import swaggerblocks.Implicits._
 import swaggerblocks._
-import swaggerblocks.rendering.circe._
-import swaggerblocks.extensions.circe.ExampleExtension
-import io.circe._
+import swaggerblocks.rendering.json._
+import swaggerblocks.extensions.json.ExampleExtension
 import io.circe.generic.auto._
 
 class ExampleExtensionSpec

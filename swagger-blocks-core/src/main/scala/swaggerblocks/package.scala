@@ -1,7 +1,7 @@
 import swaggerblocks.internal.models._
-import swaggerblocks.internal.{propertyFormats => f}
 import swaggerblocks.internal.propertyTypes.PropertyType
-import swaggerblocks.internal.{propertyTypes => s}
+import swaggerblocks.internal.propertyValues.{PropertyValue, SwaggerType}
+import swaggerblocks.internal.{propertyFormats => f, propertyTypes => s}
 
 import scala.language.implicitConversions
 
@@ -203,39 +203,74 @@ package object swaggerblocks {
     description: Option[String] = None,
     enum: List[String] = List.empty
   ): ApiParameter = {
-    ApiOtherParameter(name, Path, required = true, schema, description, enum)
+    ApiOtherParameter(
+      name,
+      Path,
+      required = true,
+      schema,
+      description,
+      default = PropertyValue.NullValue(),
+      enum
+    )
   }
 
-  def queryParameter(
+  def queryParameter[DefaultValue: SwaggerType](
     name: String,
     required: Boolean,
     schema: ApiParameterSchema,
     description: Option[String] = None,
     allowEmptyValue: Boolean = false,
+    default: DefaultValue = PropertyValue.NullValue(),
     enum: List[String] = List.empty
   ): ApiParameter = {
-    ApiOtherParameter(name, Query, required, schema, description, enum)
+    ApiOtherParameter(
+      name,
+      Query,
+      required,
+      schema,
+      description,
+      default = implicitly[SwaggerType[DefaultValue]].valueOf(default),
+      enum
+    )
   }
 
-  def headerParameter(
+  def headerParameter[DefaultValue: SwaggerType](
     name: String,
     required: Boolean,
     schema: ApiParameterSchema,
     description: Option[String] = None,
+    default: DefaultValue = PropertyValue.NullValue(),
     enum: List[String] = List.empty
   ): ApiParameter = {
-    ApiOtherParameter(name, Header, required, schema, description, enum)
+    ApiOtherParameter(
+      name,
+      Header,
+      required,
+      schema,
+      description,
+      default = implicitly[SwaggerType[DefaultValue]].valueOf(default),
+      enum
+    )
   }
 
-  def formDataParameter(
+  def formDataParameter[DefaultValue: SwaggerType](
     name: String,
     required: Boolean,
     schema: ApiParameterSchema,
     description: Option[String] = None,
     allowEmptyValue: Boolean = false,
+    default: DefaultValue = PropertyValue.NullValue(),
     enum: List[String] = List.empty
   ): ApiParameter = {
-    ApiOtherParameter(name, FormData, required, schema, description, enum)
+    ApiOtherParameter(
+      name,
+      FormData,
+      required,
+      schema,
+      description,
+      default = implicitly[SwaggerType[DefaultValue]].valueOf(default),
+      enum
+    )
   }
 
   def bodyParameter(
@@ -351,5 +386,8 @@ package object swaggerblocks {
 
     implicit def oneOfPropertyToParameterSchema(typ: PropertyType): ApiParameterSchema =
       ApiParameterValueSchema(typ)
+
+    implicit def swaggerTypeToSomeSwaggerType[T: SwaggerType](v: T): Option[T] =
+      Some(v)
   }
 }

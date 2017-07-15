@@ -60,15 +60,12 @@ object ReadmeExamples {
 
     // format: off
 
-    import javax.inject._
-    import play.api.mvc._
-
     import swaggerblocks._
     import swaggerblocks.Implicits._
-    import swaggerblocks.rendering.playJson.renderPretty
+    import swaggerblocks.rendering.json.renderPretty
 
-    @Singleton
-    class SwaggerController @Inject()() extends Controller {
+    // could be play or some other framework
+    class SwaggerController {
 
       lazy val petstoreRoot = swaggerRoot("2.0")(
         host = "petstore.swagger.wordnik.com",
@@ -96,13 +93,12 @@ object ReadmeExamples {
         PetsController.petSchema
       )
 
-      def json = Action {
-        val swaggerJson = renderPretty(petstoreRoot, paths, schemas)
+      def json = {
+        val swaggerJson: String = renderPretty(petstoreRoot, paths, schemas)
 
-        Ok(swaggerJson)
+        // response with swaggerJson as content
       }
     }
-
     // format: on
   }
 
@@ -111,9 +107,10 @@ object ReadmeExamples {
 
     import swaggerblocks._
     import swaggerblocks.Implicits._
-    import swaggerblocks.extensions.playJson.ExampleExtension
+    import swaggerblocks.extensions.json.ExampleExtension
 
-    import play.api.libs.json._
+    import io.circe.syntax._
+    import io.circe.generic.auto._
 
     lazy val schemaWithExample = swaggerSchema("SchemaWithExample")(
       property("id")(
@@ -123,17 +120,16 @@ object ReadmeExamples {
         schema = t.string
       )
     ).withExample(
-      Json.obj(
-        "id"   -> 123,
-        "name" -> "Bello"
+      Map(
+        "id"   -> 123.asJson, // if the values in a map are not uniform, you have to be
+        "name" -> "Bello".asJson // explicit about it being serializable (or use a case class)
       )
     )
 
-    // you can of course use all features provided by the json/yaml lib like
+    // you can of course use all features provided by circe like
     // case class serialization
 
     case class Dog(id: Int, name: String)
-    implicit val dogFormat = Json.format[Dog]
 
     lazy val schemaWithCaseClassExample = swaggerSchema("SchemaWithCaseClassExample")(
       property("id")(

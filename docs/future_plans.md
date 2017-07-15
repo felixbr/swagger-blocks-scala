@@ -4,7 +4,7 @@ This document outlines a few ideas and plans I have for this library.
 
 ## Current maintenance status
 
-I've been switching companies and no longer have a need for this library personally. As I don't 
+I've switched companies and no longer have a need for this library personally. As I don't 
 know of other people using this yet, it is best to lay it to rest now than to leave it in an 
 unmaintained state when people are already using it, even if I feel sad about it.
 

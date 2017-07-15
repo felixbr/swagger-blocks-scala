@@ -20,6 +20,15 @@ object specModels {
 
   case class SpecExample(value: String) extends AnyVal // {"id": 123, "name": "bello"}
 
+  sealed trait SpecValue
+  object SpecValue {
+    case class StringValue(value: String)              extends SpecValue
+    case class IntValue(value: Int)                    extends SpecValue
+    case class BooleanValue(value: Boolean)            extends SpecValue
+    case class ListValue(value: List[SpecValue])       extends SpecValue
+    case class MapValue(value: Map[String, SpecValue]) extends SpecValue
+  }
+
   case class SpecParameter(
     name: String,
     in: String,
@@ -31,6 +40,7 @@ object specModels {
     allowEmptyValue: Option[Boolean] = None,
     items: Option[SpecSchema] = None,
     collectionFormat: Option[String] = None,
+    default: Option[SpecValue] = None,
     enum: Option[List[String]] = None
   )
 

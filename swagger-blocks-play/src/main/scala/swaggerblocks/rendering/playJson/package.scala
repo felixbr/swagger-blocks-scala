@@ -10,7 +10,8 @@ package object playJson extends RenderingPackage {
   def render(
     root: ApiRoot,
     paths: List[ApiPathDefinition],
-    schemata: List[ApiSchemaDefinition]): String = {
+    schemata: List[ApiSchemaDefinition]
+  ): String = {
 
     Json.stringify(
       jsonAst(root, paths, schemata)
@@ -20,7 +21,8 @@ package object playJson extends RenderingPackage {
   def renderPretty(
     root: ApiRoot,
     paths: List[ApiPathDefinition],
-    schemata: List[ApiSchemaDefinition]): String = {
+    schemata: List[ApiSchemaDefinition]
+  ): String = {
 
     Json.prettyPrint(
       jsonAst(root, paths, schemata)
@@ -30,7 +32,8 @@ package object playJson extends RenderingPackage {
   def jsonAst(
     root: ApiRoot,
     paths: List[ApiPathDefinition],
-    schemata: List[ApiSchemaDefinition]): JsValue = {
+    schemata: List[ApiSchemaDefinition]
+  ): JsValue = {
 
     Json.toJson(
       transformSpec(ApiSpec(root, paths, schemata))

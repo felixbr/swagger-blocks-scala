@@ -6,10 +6,12 @@ trait RenderingPackage {
   def render(
     root: ApiRoot,
     paths: List[ApiPathDefinition],
-    schemata: List[ApiSchemaDefinition]): String
+    schemata: List[ApiSchemaDefinition]
+  ): String
 
   def renderPretty(
     root: ApiRoot,
     paths: List[ApiPathDefinition],
-    schemata: List[ApiSchemaDefinition]): String
+    schemata: List[ApiSchemaDefinition]
+  ): String
 }

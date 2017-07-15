@@ -1,7 +1,8 @@
 package swaggerblocks.internal
 
 import swaggerblocks._
-import propertyTypes.PropertyType
+import swaggerblocks.internal.propertyTypes.PropertyType
+import swaggerblocks.internal.propertyValues.PropertyValue
 
 object models {
 
@@ -81,6 +82,7 @@ object models {
     required: Boolean,
     schema: ApiParameterSchema,
     description: Option[String],
+    default: PropertyValue,
     enum: List[String]
   ) extends ApiParameter
 
@@ -115,7 +117,7 @@ object models {
   sealed trait ApiSchema
   case class ApiObjectSchema(
     properties: List[ApiPropertyDefinition],
-    example: Option[String] = None  // filled by ExampleExtension
+    example: Option[String] = None // filled by ExampleExtension
   ) extends ApiSchema
   case class ApiValueSchema(
     typ: PropertyType,

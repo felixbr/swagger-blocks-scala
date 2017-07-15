@@ -10,6 +10,7 @@ import org.scalacheck.Shapeless._
 import org.scalacheck.rng.Seed
 import swaggerblocks._
 import org.scalacheck.Prop._
+import swaggerblocks.internal.propertyValues.PropertyValue
 
 import scala.util.Random
 
@@ -18,10 +19,12 @@ object generators {
   implicit class RichGen(gen: Gen[_]) {
     def failures(): Int = {
       val params = Gen.Parameters.default
-      (1 to 1000).map { _ =>
-        val seed = Seed(Random.nextLong())
-        gen.apply(params, seed)
-      }.count(s => s.isEmpty)
+      (1 to 1000)
+        .map { _ =>
+          val seed = Seed(Random.nextLong())
+          gen.apply(params, seed)
+        }
+        .count(s => s.isEmpty)
     }
 
     def test() = {
@@ -57,7 +60,8 @@ object generators {
   def genSchemaRef(depth: Int = 0) =
     Gen.oneOf( // TODO inline schema
       genSchemaSingleRef(depth),
-      genSchemaMultipleRef(depth))
+      genSchemaMultipleRef(depth)
+    )
 
   def genSchemaSingleRef(depth: Int = 0): Gen[ApiSchemaRef] =
     for {
@@ -199,15 +203,15 @@ object generators {
   } yield (status, response)
 
   lazy val genApiResponse = for {
-    description <- Gen.alphaNumStr
+    description     <- Gen.alphaNumStr
     responseHeaders <- Gen.listOfN(1, genApiResponseHeader)
   } yield ApiResponse(description, schema = None, headers = responseHeaders) // TODO schemaRef
 
   lazy val genApiResponseHeader = for {
-    name <- Gen.identifier
+    name        <- Gen.identifier
     description <- genDescription
-    schema <- genApiParameterSchema()
-    enum <- genEnum
+    schema      <- genApiParameterSchema()
+    enum        <- genEnum
   } yield ApiResponseHeader(name, schema, description, enum)
 
   lazy val genApiParameters: Gen[List[ApiParameter]] =
@@ -238,32 +242,51 @@ object generators {
     name        <- Gen.alphaNumStr
     schema      <- genApiParameterSchema()
     description <- genDescription
+    default     <- genDefaultParam
   } yield
-    ApiOtherParameter(name, in = Path, required = true, schema, description, enum = List.empty)
+    ApiOtherParameter(
+      name,
+      in = Path,
+      required = true,
+      schema,
+      description,
+      default,
+      enum = List.empty
+    )
 
   lazy val genApiQueryParameter: Gen[ApiParameter] = for {
     name        <- Gen.alphaNumStr
     required    <- arbitrary[Boolean]
     schema      <- genApiParameterSchema()
     description <- genDescription
+    default     <- genDefaultParam
     enum        <- genEnum
-  } yield ApiOtherParameter(name, in = Query, required, schema, description, enum)
+  } yield ApiOtherParameter(name, in = Query, required, schema, description, default, enum)
 
   lazy val genApiHeaderParameter: Gen[ApiParameter] = for {
     name        <- Gen.identifier
     required    <- arbitrary[Boolean]
     schema      <- genApiParameterSchema()
     description <- genDescription
+    default     <- genDefaultParam
     enum        <- genEnum
-  } yield ApiOtherParameter(name, in = Header, required, schema, description, enum)
+  } yield ApiOtherParameter(name, in = Header, required, schema, description, default, enum)
 
   lazy val genApiFormDataParameter: Gen[ApiParameter] = for {
     name        <- Gen.alphaNumStr
     required    <- arbitrary[Boolean]
     schema      <- genApiParameterSchema()
     description <- genDescription
+    default     <- genDefaultParam
     enum        <- genEnum
-  } yield ApiOtherParameter(name, in = FormData, required, schema, description, enum)
+  } yield ApiOtherParameter(name, in = FormData, required, schema, description, default, enum)
+
+  lazy val genDefaultParam: Gen[PropertyValue] = Gen.oneOf(
+    Gen.alphaStr.map(PropertyValue.StringValue),
+    Gen.oneOf(1 to 100).map(PropertyValue.IntValue),
+    arbitrary[Boolean].map(PropertyValue.BooleanValue),
+    Gen.const(PropertyValue.NullValue())
+  )
 
   def genApiParameterSchema(depth: Int = 0): Gen[ApiParameterSchema] =
     if (depth == 0) // only nest one level

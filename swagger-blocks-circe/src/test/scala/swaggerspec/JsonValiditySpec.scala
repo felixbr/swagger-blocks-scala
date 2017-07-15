@@ -3,7 +3,7 @@ package swaggerspec
 import fixtures.{PetstoreAPI => P}
 import helpers.CustomMatchers
 import org.scalatest._
-import swaggerblocks.rendering.circe._
+import swaggerblocks.rendering.json._
 
 class JsonValiditySpec
     extends WordSpec

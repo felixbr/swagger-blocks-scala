@@ -1,3 +1,3 @@
 logLevel := Level.Warn
 
-addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "0.4.7")
+addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "0.5.1")

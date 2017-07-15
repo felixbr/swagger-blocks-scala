@@ -5,7 +5,7 @@ import fixtures.{PetstoreAPI => P}
 import helpers.CustomMatchers
 import org.scalatest._
 import org.scalatest.prop.{Checkers, GeneratorDrivenPropertyChecks}
-import swaggerblocks.rendering.circe._
+import swaggerblocks.rendering.json._
 
 class ArbitraryJsonValiditySpec
     extends WordSpec

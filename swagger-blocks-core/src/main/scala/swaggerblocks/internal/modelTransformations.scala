@@ -3,6 +3,7 @@ package swaggerblocks.internal
 import swaggerblocks.internal.models._
 import swaggerblocks.internal.specModels._
 import swaggerblocks.Method
+import swaggerblocks.internal.propertyValues.PropertyValue
 import writeLogic._
 
 // api* to spec* transformations
@@ -10,7 +11,8 @@ object modelTransformations {
 
   def transformSchemaRef(
     apiSchemaRef: ApiSchemaRef,
-    description: Option[String] = None): SpecSchema = apiSchemaRef match {
+    description: Option[String] = None
+  ): SpecSchema = apiSchemaRef match {
 
     case SingleRef(schemaDef) =>
       SpecSchema(
@@ -24,7 +26,8 @@ object modelTransformations {
         items = Some(
           SpecSchema(
             $ref = Some(referenceTo(schemaDef.name))
-          )),
+          )
+        ),
         description = description // TODO check if this has to be in items object
       )
 
@@ -80,6 +83,7 @@ object modelTransformations {
         name = p.name,
         in = parameterInToString(p.in),
         description = p.description,
+        default = transformPropertyValue(p.default),
         required = Some(p.required),
         enum = if (p.enum.isEmpty) None else Some(p.enum)
       )
@@ -108,6 +112,32 @@ object modelTransformations {
     }
   }
 
+  def transformPropertyValue(propValue: PropertyValue): Option[SpecValue] = propValue match {
+    case PropertyValue.StringValue(v) =>
+      Some(SpecValue.StringValue(v))
+
+    case PropertyValue.IntValue(v) =>
+      Some(SpecValue.IntValue(v))
+
+    case PropertyValue.BooleanValue(v) =>
+      Some(SpecValue.BooleanValue(v))
+
+    case PropertyValue.ListValue(v) =>
+      Some(
+        SpecValue.ListValue(v.flatMap(transformPropertyValue))
+      )
+
+    case PropertyValue.MapValue(mapping) =>
+      Some(
+        SpecValue.MapValue(
+          mapping
+            .map { case (k, v) => (k, transformPropertyValue(v)) }
+            .collect { case (k, Some(v)) => (k, v) }
+        )
+      )
+    case PropertyValue.NullValue() => None
+  }
+
   def transformResponseHeader(apiResponseHeader: ApiResponseHeader): SpecResponseHeader = {
     val base = SpecResponseHeader(
       description = apiResponseHeader.description,
@@ -118,7 +148,8 @@ object modelTransformations {
 
   def transformResponseHeaderSchema(
     base: SpecResponseHeader,
-    schema: ApiParameterSchema): SpecResponseHeader = {
+    schema: ApiParameterSchema
+  ): SpecResponseHeader = {
 
     schema match {
       // TODO fix this mess

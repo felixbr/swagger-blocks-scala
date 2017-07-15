@@ -1,39 +1,39 @@
 package swaggerblocks.rendering
 
-import swaggerblocks.internal.models.{ApiPathDefinition, ApiRoot, ApiSchemaDefinition, ApiSpec}
-import swaggerblocks.RenderingPackage
-import io.circe._
+import io.circe.yaml._
 import io.circe.generic.auto._
 import io.circe.syntax._
+import swaggerblocks._
 import swaggerblocks.internal.modelTransformations.transformSpec
-import circe.formats._
+import swaggerblocks.internal.models._
 
-package object circe extends RenderingPackage {
+package object yaml extends RenderingPackage with SpecEncoders {
   def render(
     root: ApiRoot,
     paths: List[ApiPathDefinition],
-    schemata: List[ApiSchemaDefinition]): String = {
+    schemata: List[ApiSchemaDefinition]
+  ): String = {
 
-    val printer = Printer.noSpaces.copy(
+    val printer = Printer.spaces2.copy(
       preserveOrder = true,
       dropNullKeys = true
     )
 
-    transformSpec(ApiSpec(root, paths, schemata)).asJson.pretty(printer)
+    printer.pretty(transformSpec(ApiSpec(root, paths, schemata)).asJson)
   }
 
   def renderPretty(
     root: ApiRoot,
     paths: List[ApiPathDefinition],
-    schemata: List[ApiSchemaDefinition]): String = {
+    schemata: List[ApiSchemaDefinition]
+  ): String = {
 
     val printer = Printer.spaces2.copy(
       preserveOrder = true,
-      dropNullKeys = true,
-      colonLeft = ""
+      dropNullKeys = true
     )
 
-    transformSpec(ApiSpec(root, paths, schemata)).asJson.pretty(printer)
+    printer.pretty(transformSpec(ApiSpec(root, paths, schemata)).asJson)
   }
 
   def jsonAst(root: ApiRoot, paths: List[ApiPathDefinition], schemata: List[ApiSchemaDefinition]) = {

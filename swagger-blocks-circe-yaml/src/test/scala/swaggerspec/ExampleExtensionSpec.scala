@@ -2,13 +2,12 @@ package swaggerspec
 
 import fixtures.{PetstoreAPI => P}
 import helpers.CustomMatchers
-import net.jcazevedo.moultingyaml.DefaultYamlProtocol._
-import net.jcazevedo.moultingyaml._
 import org.scalatest._
 import swaggerblocks.Implicits._
 import swaggerblocks._
 import swaggerblocks.extensions.yaml._
 import swaggerblocks.rendering.yaml._
+import io.circe.generic.auto._
 
 class ExampleExtensionSpec
     extends WordSpec
@@ -25,13 +24,12 @@ class ExampleExtensionSpec
     )
   ).withExample(
     Map(
-      "id"   -> 123.toYaml,
-      "name" -> "Bello".toYaml
-    ).toYaml
+      "id"   -> "123",
+      "name" -> "Bello"
+    )
   )
 
   case class Dog(id: Int, name: String)
-  implicit val dogFormat = yamlFormat2(Dog)
 
   val schemaWithCaseClassExample = swaggerSchema("SchemaWithCaseClassExample")(
     property("id")(

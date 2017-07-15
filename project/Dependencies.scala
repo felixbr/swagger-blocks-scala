@@ -15,13 +15,14 @@ object Version {
   final val scalacheck          = "1.13.4"
   final val scalacheckShapeless = "1.1.3"
   final val circe               = "0.7.0"
+  final val circeYaml           = "0.6.1"
 }
 
 object Lib {
   val akkaHttp            = "com.typesafe.akka"          %% "akka-http-experimental"    % Version.akka
   val play                = "com.typesafe.play"          %% "play"                      % Version.play_2_11
-  val playJson            = "com.typesafe.play"          %% "play-json"                  % Version.play
-  val playJson_2_11       = "com.typesafe.play"          %% "play-json"                  % Version.play_2_11
+  val playJson            = "com.typesafe.play"          %% "play-json"                 % Version.play
+  val playJson_2_11       = "com.typesafe.play"          %% "play-json"                 % Version.play_2_11
   val scalaTest           = "org.scalatest"              %% "scalatest"                 % Version.scalaTest
   val upickle             = "com.lihaoyi"                %% "upickle"                   % Version.uPickle
   val jsonSchemaValidator = "com.github.fge"             % "json-schema-validator"      % Version.jsonSchemaValidator
@@ -32,4 +33,5 @@ object Lib {
   val circeCore           = "io.circe"                   %% "circe-core"                % Version.circe
   val circeGeneric        = "io.circe"                   %% "circe-generic"             % Version.circe
   val circeParser         = "io.circe"                   %% "circe-parser"              % Version.circe
+  val circeYaml           = "io.circe"                   %% "circe-yaml"                % Version.circeYaml
 }
