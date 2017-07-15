@@ -1,6 +1,6 @@
 val commonSettings = List(
   Quiet.silenceScalaBinaryVersionWarning,
-  scalaVersion := Version.scala_2_11,
+  scalaVersion := Version.scala,
   crossScalaVersions := Version.crossVersions,
   version := "0.4.0",
   homepage := Some(url("https://github.com/felixbr/swagger-blocks-scala")),
@@ -76,13 +76,7 @@ lazy val examples = project
     name := "swagger-blocks-examples",
     publishArtifact := false,
     publish := {},
-    publishLocal := {},
-    libraryDependencies ++= {
-      List(
-        if (scalaVersion.value == Version.scala_2_11) Lib.playJson_2_11 else Lib.playJson
-      )
-    },
-    crossScalaVersions := List(Version.scala_2_11)
+    publishLocal := {}
   )
 
 initialCommands in console in core in Test :=

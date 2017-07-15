@@ -26,7 +26,7 @@ keep up with updating dependencies and the like.
 
 ### Dependencies
 
-The library is published on Sonatype for both `Scala 2.11.8` and `Scala 2.12.1`:
+The library is published on Sonatype for both `Scala 2.11.11` and `Scala 2.12.2`:
 ```scala
 resolvers += Resolver.sonatypeRepo("releases")
 ```
