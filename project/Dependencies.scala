@@ -8,7 +8,7 @@ object Version {
   final val jsonSchemaValidator = "2.2.6"
   final val scalacheck          = "1.13.4"
   final val scalacheckShapeless = "1.1.3"
-  final val circe               = "0.7.0"
+  final val circe               = "0.8.0"
   final val circeYaml           = "0.6.1"
 }
 

@@ -19,7 +19,7 @@ val commonDeps = List(
 
 lazy val root = project
   .in(file("."))
-  .aggregate(core, circe, yaml)
+  .aggregate(core, json, yaml, examples)
   .settings(commonSettings: _*)
   .settings(publishSettings: _*)
   .settings(
@@ -39,13 +39,13 @@ lazy val core = project
     libraryDependencies ++= commonDeps
   )
 
-lazy val circe = project
-  .in(file("swagger-blocks-circe"))
+lazy val json = project
+  .in(file("swagger-blocks-json"))
   .dependsOn(core % "compile;test->test")
   .settings(commonSettings: _*)
   .settings(publishSettings: _*)
   .settings(
-    name := "swagger-blocks-scala",
+    name := "swagger-blocks-json",
     libraryDependencies ++= commonDeps ++ List(
       Lib.circeCore,
       Lib.circeGeneric,
@@ -70,13 +70,14 @@ lazy val yaml = project
 
 lazy val examples = project
   .in(file("examples"))
-  .dependsOn(core, yaml, circe)
+  .dependsOn(core, json, yaml)
   .settings(commonSettings: _*)
   .settings(
     name := "swagger-blocks-examples",
     publishArtifact := false,
     publish := {},
-    publishLocal := {}
+    publishLocal := {},
+    packagedArtifacts := Map.empty
   )
 
 initialCommands in console in core in Test :=
