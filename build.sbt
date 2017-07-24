@@ -2,7 +2,7 @@ val commonSettings = List(
   Quiet.silenceScalaBinaryVersionWarning,
   scalaVersion := Version.scala,
   crossScalaVersions := Version.crossVersions,
-  version := "0.4.0",
+  version := "0.5.0",
   homepage := Some(url("https://github.com/felixbr/swagger-blocks-scala")),
   organization := "io.github.felixbr",
   licenses := List(
@@ -72,6 +72,7 @@ lazy val examples = project
   .in(file("examples"))
   .dependsOn(core, json, yaml)
   .settings(commonSettings: _*)
+  .settings(publishSettings: _*)
   .settings(
     name := "swagger-blocks-examples",
     publishArtifact := false,

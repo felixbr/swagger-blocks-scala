@@ -30,21 +30,24 @@ The library is published on Sonatype for both `Scala 2.11.11` and `Scala 2.12.2`
 ```scala
 resolvers += Resolver.sonatypeRepo("releases")
 ```
-There is a core modul available for the DSL and core data types:
-```scala
-"io.github.felixbr" %% "swagger-blocks-scala" % "0.4.0"
-```
+
 There are serializers for json and yaml. The extensions also include the core lib, so
 you only need to specify the extension you want to use:
 
-#### moultingyaml (0.4.0)
+#### json (circe 0.8.0)
 ```scala
-"io.github.felixbr" %% "swagger-blocks-yaml" % "0.4.0
+"io.github.felixbr" %% "swagger-blocks-json" % "0.5.0"
 ```
-#### circe (0.7.0)
+#### yaml (circe-yaml 0.6.1)
 ```scala
-"io.github.felixbr" %% "swagger-blocks-circe" % "0.4.0"
+"io.github.felixbr" %% "swagger-blocks-yaml" % "0.5.0"
 ```
+
+#### There is of course also the core module available for the DSL and core data types alone:
+```scala
+"io.github.felixbr" %% "swagger-blocks-core" % "0.5.0"
+```
+
 ### Writing Swagger Path and Schema specifications
     
 Write a specification for your endpoint (e.g. in your controller's companion 
@@ -110,7 +113,7 @@ write the required root metadata for swagger:
 ```Scala
 import swaggerblocks._
 import swaggerblocks.Implicits._
-import swaggerblocks.rendering.circe.renderPretty
+import swaggerblocks.rendering.json.renderPretty
 
 // could be play or some other framework
 class SwaggerController {
@@ -164,7 +167,7 @@ call `.withExample` on the schema definition like shown below:
 ```scala
 import swaggerblocks._
 import swaggerblocks.Implicits._
-import swaggerblocks.extensions.circe.ExampleExtension
+import swaggerblocks.extensions.json.ExampleExtension
 
 import io.circe.syntax._
 import io.circe.generic.auto._
