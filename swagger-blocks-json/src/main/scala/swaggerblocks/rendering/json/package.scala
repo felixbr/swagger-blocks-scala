@@ -16,7 +16,7 @@ package object json extends RenderingPackage with SpecEncoders {
 
     val printer = Printer.noSpaces.copy(
       preserveOrder = true,
-      dropNullKeys = true
+      dropNullValues = true
     )
 
     transformSpec(ApiSpec(root, paths, schemata)).asJson.pretty(printer)
@@ -30,7 +30,7 @@ package object json extends RenderingPackage with SpecEncoders {
 
     val printer = Printer.spaces2.copy(
       preserveOrder = true,
-      dropNullKeys = true,
+      dropNullValues = true,
       colonLeft = ""
     )
 

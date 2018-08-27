@@ -8,7 +8,7 @@ object json {
   implicit class ExampleExtension(schemaDef: ApiSchemaDefinition) {
     private val printer = Printer.spaces2.copy(
       preserveOrder = true,
-      dropNullKeys = true,
+      dropNullValues = true,
       colonLeft = ""
     )
 
