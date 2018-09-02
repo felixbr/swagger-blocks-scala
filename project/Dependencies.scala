@@ -1,7 +1,7 @@
 import sbt._
 
 object Version {
-  final val scala               = "2.12.2"
+  final val scala               = "2.12.6"
   final val scala_2_11          = "2.11.11"
   final val crossVersions       = List(scala_2_11, scala)
   final val scalaTest           = "3.0.0"
