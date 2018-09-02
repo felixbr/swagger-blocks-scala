@@ -26,7 +26,7 @@ keep up with updating dependencies and the like.
 
 ### Dependencies
 
-The library is published on Sonatype for both `Scala 2.11.11` and `Scala 2.12.2`:
+The library is published on Sonatype for both `Scala 2.11.11` and `Scala 2.12.6`:
 ```scala
 resolvers += Resolver.sonatypeRepo("releases")
 ```
@@ -34,18 +34,18 @@ resolvers += Resolver.sonatypeRepo("releases")
 There are serializers for json and yaml. The extensions also include the core lib, so
 you only need to specify the extension you want to use:
 
-#### json (circe 0.8.0)
+#### json (circe 0.9.3)
 ```scala
-"io.github.felixbr" %% "swagger-blocks-json" % "0.5.0"
+"io.github.felixbr" %% "swagger-blocks-json" % "0.6.0"
 ```
-#### yaml (circe-yaml 0.6.1)
+#### yaml (circe-yaml 0.8.0)
 ```scala
-"io.github.felixbr" %% "swagger-blocks-yaml" % "0.5.0"
+"io.github.felixbr" %% "swagger-blocks-yaml" % "0.6.0"
 ```
 
 #### There is of course also the core module available for the DSL and core data types alone:
 ```scala
-"io.github.felixbr" %% "swagger-blocks-core" % "0.5.0"
+"io.github.felixbr" %% "swagger-blocks-core" % "0.6.0"
 ```
 
 ### Writing Swagger Path and Schema specifications
