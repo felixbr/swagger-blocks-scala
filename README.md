@@ -9,7 +9,7 @@ Currently this only supports a part of the full swagger-spec.
 
 ## Note about current maintenance status
 
-I currently have no personal use for the library anymore, so don't expect frequent updates.
+I currently have no personal use for the library anymore, so don't expect frequent updates. Personally I'd recommend either using GraphQL (which brings documentation out of the box) or using a library like [tapir](https://github.com/softwaremill/tapir) (which can generate OpenAPI definitions).
 
 For 0.5.x onward the scope of the project was reduced, so this will hopefully help me
 keep up with updating dependencies and the like.
