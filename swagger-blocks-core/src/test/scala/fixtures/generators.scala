@@ -6,7 +6,7 @@ import swaggerblocks.internal.propertyFormats
 import swaggerblocks.internal.propertyTypes.PropertyType
 import org.scalacheck._
 import org.scalacheck.Arbitrary._
-import org.scalacheck.Shapeless._
+import org.scalacheck.ScalacheckShapeless._
 import org.scalacheck.rng.Seed
 import swaggerblocks._
 import org.scalacheck.Prop._
